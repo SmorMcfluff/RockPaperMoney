@@ -54,7 +54,7 @@ public class SaveDataManager : MonoBehaviour
 
     public static void SavePlayer()
     {
-        
+
         for (int i = 0; i < instance.localPlayerData.factoriesJsonStrings.Count; i++)
         {
             SaveFactory(i);

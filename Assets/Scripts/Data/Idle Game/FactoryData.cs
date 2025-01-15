@@ -2,8 +2,8 @@ using System;
 
 public class FactoryData
 {
-    public float moneyToVend = 0.01f;
-    public float vendFrequency = 3;
+    public float moneyToVend;
+    public float vendFrequency;
 
     public float totalMoneyVended;
     public int totalVends;

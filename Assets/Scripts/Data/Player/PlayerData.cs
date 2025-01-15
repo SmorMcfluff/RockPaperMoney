@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 public class PlayerData
 {
-    public string username = "";
+    public string username;
 
-    public int winCount = 0;
-    public int lossCount = 0;
+    public int winCount;
+    public int lossCount;
 
     public bool rockUnlocked = true;
     public bool paperUnlocked = true;

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Factory : MonoBehaviour
 {
-    public float moneyToVend = 0.01f;
-    public float vendFrequency = 3;
+    [HideInInspector] public float moneyToVend = 0.01f;
+    [HideInInspector] public float vendFrequency = 30;
 
-    public float totalMoneyVended;
-    public int totalVends;
+    [HideInInspector] public float totalMoneyVended;
+    [HideInInspector] public int totalVends;
 
-    public DateTime lastVendTime;
+    [HideInInspector] public DateTime lastVendTime;
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class Factory : MonoBehaviour
         float vendAmount = moneyToVend * vendsQueued;
 
         SetTimeStamps();
-        
+
         SaveDataManager.instance.localPlayerData.ChangeMoneyBalance(vendAmount);
         Debug.Log(SaveDataManager.instance.localPlayerData.moneyBalance.ToString());
 

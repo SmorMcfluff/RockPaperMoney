@@ -23,7 +23,7 @@ public class IdleGameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))

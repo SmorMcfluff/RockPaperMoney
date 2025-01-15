@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Factory : MonoBehaviour
 {
-    public decimal moneyToVend = 0.01m;
+    public float moneyToVend = 0.01f;
     public float vendFrequency = 3;
 
     public float totalMoneyVended;
@@ -32,7 +32,6 @@ public class Factory : MonoBehaviour
         if (timeSinceVend.TotalSeconds > vendFrequency)
         {
             Vend(timeSinceVend);
-            SetTimeStamps();
         }
     }
 
@@ -40,12 +39,11 @@ public class Factory : MonoBehaviour
     private void Vend(TimeSpan timeSinceVend)
     {
         int vendsQueued = CheckVendsQueued(timeSinceVend);
-        decimal vendedAmount = moneyToVend * vendsQueued;
+        float vendAmount = moneyToVend * vendsQueued;
 
-        Debug.Log(vendsQueued + " vends for a total of " + vendedAmount);
-
-        SaveDataManager.instance.localPlayerData.ChangeMoneyBalance(vendedAmount);
-
+        SetTimeStamps();
+        
+        SaveDataManager.instance.localPlayerData.ChangeMoneyBalance(vendAmount);
         Debug.Log(SaveDataManager.instance.localPlayerData.moneyBalance.ToString());
 
         SaveDataManager.SavePlayer();
@@ -66,12 +64,29 @@ public class Factory : MonoBehaviour
     }
 
 
-    public void LoadData(Factory factoryData)
+    public FactoryData GetData()
+    {
+        var factoryData = new FactoryData();
+        factoryData.moneyToVend = moneyToVend;
+        factoryData.vendFrequency = vendFrequency;
+
+        factoryData.totalMoneyVended = totalMoneyVended;
+        factoryData.totalVends = totalVends;
+
+        factoryData.lastVendTimeString = lastVendTime.ToString();
+
+        return factoryData;
+    }
+
+
+    public void SetData(FactoryData factoryData)
     {
         moneyToVend = factoryData.moneyToVend;
         vendFrequency = factoryData.vendFrequency;
+
         totalMoneyVended = factoryData.totalMoneyVended;
         totalVends = factoryData.totalVends;
-        lastVendTime = factoryData.lastVendTime;
+
+        lastVendTime = DateTime.Parse(factoryData.lastVendTimeString);
     }
 }

@@ -35,21 +35,24 @@ public class IdleGameManager : MonoBehaviour
 
     public void AddFactory()
     {
-        Debug.Log("New factory!");
-        var newFactory = Instantiate(factoryPrefab);
+        var newFactoryObject = Instantiate(factoryPrefab);
+        var newFactory = newFactoryObject.GetComponent<Factory>();
 
-        factories.Add(newFactory.GetComponent<Factory>());
-        SaveDataManager.instance.localPlayerData.factories = factories;
+        var newFactoryJsonString = JsonUtility.ToJson(newFactory);
+
+        factories.Add(newFactory);
+        SaveDataManager.instance.localPlayerData.factoriesJsonStrings.Add(newFactoryJsonString);
         SaveDataManager.SavePlayer();
     }
 
+
     public void LoadFactory(int i)
     {
-        var newFactory = Instantiate(factoryPrefab);
-        newFactory.GetComponent<Factory>().LoadData(SaveDataManager.instance.localPlayerData.factories[i]);
+        var newFactoryJsonString = SaveDataManager.instance.localPlayerData.factoriesJsonStrings[i];
+        FactoryData newFactoryData = JsonUtility.FromJson<FactoryData>(newFactoryJsonString);
 
-        factories.Add(newFactory.GetComponent<Factory>());
-        SaveDataManager.instance.localPlayerData.factories = factories;
-        SaveDataManager.SavePlayer();
+        var newFactoryObject = Instantiate(factoryPrefab);
+        newFactoryObject.GetComponent<Factory>().SetData(newFactoryData);
+        factories.Add(newFactoryObject.GetComponent<Factory>());
     }
 }

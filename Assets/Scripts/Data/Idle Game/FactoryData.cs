@@ -1,12 +1,13 @@
-//using System;
+using System;
 
-//public class FactoryData
-//{
-//    private decimal centsPerVend = 0.01m;
-//    private float vendFrequency = 3;
+public class FactoryData
+{
+    public float moneyToVend = 0.01f;
+    public float vendFrequency = 3;
 
-//    private float totalMoneyVended;
-//    private int totalVends;
+    public float totalMoneyVended;
+    public int totalVends;
 
-//    private DateTime lastVendTime;
-//}
+    public DateTime lastVendTime;
+    public string lastVendTimeString;
+}

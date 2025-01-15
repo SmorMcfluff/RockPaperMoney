@@ -13,12 +13,12 @@ public class PlayerData
 
     public string moneyBalance = "0";
 
-    public List<Factory> factories;
+    public List<string> factoriesJsonStrings = new();
 
-    public void ChangeMoneyBalance(decimal amount)
+    public void ChangeMoneyBalance(float amount)
     {
-        decimal moneyAmount = decimal.Parse(moneyBalance);
+        float moneyAmount = float.Parse(moneyBalance);
         moneyAmount += amount;
-        moneyBalance = moneyAmount.ToString();
+        moneyBalance = moneyAmount.ToString("F2");
     }
 }

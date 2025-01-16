@@ -5,7 +5,7 @@ public class IdleGameManager : MonoBehaviour
 {
     public static IdleGameManager Instance;
 
-    public List<Factory> factories;
+    public List<Factory> factories = new List<Factory>();
     public GameObject factoryPrefab;
 
     private void Awake()
@@ -28,22 +28,36 @@ public class IdleGameManager : MonoBehaviour
         {
             AddFactory();
         }
+
+        HandleFactories();
+    }
+
+
+    private void HandleFactories()
+    {
+        foreach (Factory factory in factories)
+        {
+            factory.CheckTimeStamps();
+        }
     }
 
 
     public void AddFactory()
     {
-        var newFactoryObject = Instantiate(factoryPrefab);
-        var newFactory = newFactoryObject.GetComponent<Factory>();
+        //var newFactoryObject = Instantiate(factoryPrefab);
+        var newFactory = new Factory();
+        newFactory.SetTimeStamps();
 
         var newFactoryJsonString = JsonUtility.ToJson(newFactory);
 
         factories.Add(newFactory);
-
-        SaveDataManager.Instance.localPlayerData.factoriesJsonStrings.Add(newFactoryJsonString);
+        
         IdleGameUIManager.Instance.UpdateFactoryText();
         FactoryStore.Instance.SetFactoryPrice();
+
+        SaveDataManager.Instance.localPlayerData.factoriesJsonStrings.Add(newFactoryJsonString);
         SaveDataManager.Instance.SavePlayer();
+
     }
 
 
@@ -52,8 +66,11 @@ public class IdleGameManager : MonoBehaviour
         var newFactoryJsonString = SaveDataManager.Instance.localPlayerData.factoriesJsonStrings[i];
         FactoryData newFactoryData = JsonUtility.FromJson<FactoryData>(newFactoryJsonString);
 
-        var newFactoryObject = Instantiate(factoryPrefab);
-        newFactoryObject.GetComponent<Factory>().SetData(newFactoryData);
-        factories.Add(newFactoryObject.GetComponent<Factory>());
+        var newFactory = new Factory(newFactoryData);
+        factories.Add(newFactory);
+
+        //var newFactoryObject = Instantiate(factoryPrefab);
+        //newFactoryObject.GetComponent<Factory>().SetData(newFactoryData);
+        //factories.Add(newFactoryObject.GetComponent<Factory>());
     }
 }

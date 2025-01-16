@@ -5,10 +5,10 @@ public class FactoryStore : MonoBehaviour
 {
     public static FactoryStore Instance;
 
-    public float baseFactoryPrice = 0.01f;
-    public float factoryPrice;
+    [HideInInspector] public float baseFactoryPrice = 0.01f;
+    [HideInInspector] public float factoryPrice;
 
-    public bool canAfford;
+    [HideInInspector] public bool canAfford;
 
     private void Awake()
     {
@@ -39,10 +39,6 @@ public class FactoryStore : MonoBehaviour
 
             IdleGameUIManager.Instance.UpdateMoneyText();
             IdleGameUIManager.Instance.UpdatePriceText(Instance.CheckIfAffordable());
-        }
-        else
-        {
-            Debug.Log("Not Enough Money");
         }
     }
 

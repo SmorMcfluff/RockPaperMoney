@@ -6,7 +6,6 @@ public class IdleGameManager : MonoBehaviour
     public static IdleGameManager Instance;
 
     public List<Factory> factories = new List<Factory>();
-    public GameObject factoryPrefab;
 
     private void Awake()
     {

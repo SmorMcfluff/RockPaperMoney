@@ -11,7 +11,7 @@ public class PlayerData
     public bool paperUnlocked = true;
     public bool scissorsUnlocked = true;
 
-    public string moneyBalance = "0";
+    public string moneyBalance = "0.01";
 
     public List<string> factoriesJsonStrings = new();
 
@@ -20,5 +20,10 @@ public class PlayerData
         float moneyAmount = float.Parse(moneyBalance);
         moneyAmount += amount;
         moneyBalance = moneyAmount.ToString("F2");
+    }
+
+    public float GetMoneyBalance()
+    {
+        return float.Parse(moneyBalance);
     }
 }

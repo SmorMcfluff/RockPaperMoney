@@ -5,10 +5,13 @@ using UnityEngine;
 public class Factory : MonoBehaviour
 {
     [HideInInspector] public float moneyToVend = 0.01f;
-    [HideInInspector] public float vendFrequency = 30;
+    [HideInInspector] public float vendFrequency = 3;//weiner was h3r3
 
     [HideInInspector] public float totalMoneyVended;
     [HideInInspector] public int totalVends;
+
+    [HideInInspector] public int vendUpgrades = 0;
+    [HideInInspector] public int frequencyUpgrades = 0;
 
     [HideInInspector] public DateTime lastVendTime;
 
@@ -38,16 +41,15 @@ public class Factory : MonoBehaviour
 
     private void Vend(TimeSpan timeSinceVend)
     {
+        float upgradedMoneyToVend = moneyToVend * Mathf.Pow(2, vendUpgrades);
         int vendsQueued = CheckVendsQueued(timeSinceVend);
-        float vendAmount = moneyToVend * vendsQueued;
+        float vendAmount = upgradedMoneyToVend * vendsQueued;
 
         SetTimeStamps();
 
-        SaveDataManager.instance.localPlayerData.ChangeMoneyBalance(vendAmount);
-        Debug.Log(SaveDataManager.instance.localPlayerData.moneyBalance.ToString());
-
-        SaveDataManager.SavePlayer();
-    }
+        SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(vendAmount);
+        IdleGameUIManager.Instance.UpdateMoneyText();
+        }
 
 
     private int CheckVendsQueued(TimeSpan timeSinceVend)
@@ -61,6 +63,26 @@ public class Factory : MonoBehaviour
     private void SetTimeStamps()
     {
         lastVendTime = DateTime.UtcNow;
+    }
+
+
+    public void UpgradeVending()
+    {
+        if(vendUpgrades < 10)
+        { 
+            vendUpgrades++;
+            SaveDataManager.Instance.SavePlayer();
+        }
+    }
+
+
+    public void UpgradeSpeed()
+    {
+        if(frequencyUpgrades < 25)
+        {
+            frequencyUpgrades++;
+            SaveDataManager.Instance.SavePlayer();
+        }
     }
 
 

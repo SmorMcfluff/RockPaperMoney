@@ -2,74 +2,87 @@ using UnityEngine;
 
 public class SaveDataManager : MonoBehaviour
 {
-    public static SaveDataManager instance;
+    public static SaveDataManager Instance;
     public PlayerData localPlayerData;
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
-            Debug.Log("instance of" + GetType() + " already exists");
             Destroy(gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        LoadPlayer();
     }
 
     private void Start()
     {
-        LoadPlayer();
+        IdleGameUIManager.Instance.UpdateAllText();
+        Instance.InvokeRepeating(nameof(SavePlayer), 3, 30);
     }
 
 
     public static void LoadPlayer()
     {
-        instance.localPlayerData = new PlayerData();
+        Instance.localPlayerData = new PlayerData();
 
 
         if (string.IsNullOrEmpty(PlayerPrefs.GetString("PlayerSaveData")))
         {
-            SavePlayer(); //Make an empty save state - a new player
+            Instance.SavePlayer(); //Make an empty save state - a new player
         }
 
         var loadedJson = PlayerPrefs.GetString("PlayerSaveData");
 
         var saveData = JsonUtility.FromJson<PlayerData>(loadedJson);
-        instance.localPlayerData = saveData;
+        Instance.localPlayerData = saveData;
 
-        Debug.Log(JsonUtility.ToJson(instance.localPlayerData));
+        Debug.Log(JsonUtility.ToJson(Instance.localPlayerData));
 
-        if (instance.localPlayerData.factoriesJsonStrings.Count > 0)
+        if (Instance.localPlayerData.factoriesJsonStrings.Count > 0)
         {
-            for (int i = 0; i < instance.localPlayerData.factoriesJsonStrings.Count; i++)
+            for (int i = 0; i < Instance.localPlayerData.factoriesJsonStrings.Count; i++)
             {
-                IdleGameManager.instance.LoadFactory(i);
+                IdleGameManager.Instance.LoadFactory(i);
             }
         }
     }
 
 
-    public static void SavePlayer()
+    public void SavePlayer()
     {
-
-        for (int i = 0; i < instance.localPlayerData.factoriesJsonStrings.Count; i++)
+        for (int i = 0; i < Instance.localPlayerData.factoriesJsonStrings.Count; i++)
         {
             SaveFactory(i);
         }
 
-        PlayerData saveData = instance.localPlayerData;
+        PlayerData saveData = Instance.localPlayerData;
 
         string jsonString = JsonUtility.ToJson(saveData);
 
         PlayerPrefs.SetString("PlayerSaveData", jsonString);
     }
 
+
     private static void SaveFactory(int i)
     {
-        var factoryData = IdleGameManager.instance.factories[i].GetData();
-        instance.localPlayerData.factoriesJsonStrings[i] = JsonUtility.ToJson(factoryData);
+        var factoryData = IdleGameManager.Instance.factories[i].GetData();
+        Instance.localPlayerData.factoriesJsonStrings[i] = JsonUtility.ToJson(factoryData);
+    }
+
+
+    private void OnApplicationQuit()
+    {
+        SavePlayer();
+    }
+
+
+    private void OnApplicationFocus(bool focus)
+    {
+        SavePlayer();
     }
 }

@@ -6,7 +6,7 @@ public class Factory
 {
     [HideInInspector] public float baseMoneyToVend = 0.01f;
 
-    [HideInInspector] public float baseVendFrequency = 5;//weiner was hr3
+    [HideInInspector] public float baseVendFrequency = 15f;//weiner was hr3
     [HideInInspector] private float upgradedVendFrequency;
 
     [HideInInspector] public int moneyUpgrades;
@@ -22,12 +22,11 @@ public class Factory
 
     public Factory()
     {
-        baseVendFrequency = 5;//weiner was hr3
-        upgradedVendFrequency = GetUpgradedVendFrequency();
-
         moneyUpgrades = 0;
         frequencyUpgrades = 0;
-        
+
+        upgradedVendFrequency = GetUpgradedVendFrequency();
+
         SetMoneyUpgradePrice();
         SetFrequencyUpgradePrice();
     }
@@ -39,9 +38,10 @@ public class Factory
         baseMoneyToVend = factoryData.moneyToVend;
         baseVendFrequency = factoryData.baseVendFrequency;
 
-
         moneyUpgrades = factoryData.moneyUpgrades;
         frequencyUpgrades = factoryData.frequencyUpgrades;
+
+        upgradedVendFrequency = GetUpgradedVendFrequency();
 
         lastVendTime = DateTime.Parse(factoryData.lastVendTimeString);
 
@@ -81,13 +81,13 @@ public class Factory
 
     public float GetUpgradedVendFrequency()
     {
-        return MathF.Floor(baseVendFrequency - 1 * frequencyUpgrades);
+        return MathF.Floor(baseVendFrequency - frequencyUpgrades);
     }
 
 
     private int CheckVendsQueued(TimeSpan timeSinceVend)
     {
-        var unroundedVendsQueued = timeSinceVend.TotalSeconds / baseVendFrequency;
+        var unroundedVendsQueued = timeSinceVend.TotalSeconds / upgradedVendFrequency;
         int vendsQueued = (int)Math.Floor(unroundedVendsQueued);
         return vendsQueued;
     }
@@ -105,7 +105,7 @@ public class Factory
         {
             moneyUpgrades++;
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-moneyUpgradePrice);
-            
+
             SetMoneyUpgradePrice();
 
             SaveDataManager.Instance.SavePlayer();
@@ -115,7 +115,7 @@ public class Factory
 
     public void UpgradeFrequency()
     {
-        if (frequencyUpgrades < 25 && float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance) >= frequencyUpgradePrice)
+        if (frequencyUpgrades < 15 && float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance) >= frequencyUpgradePrice)
         {
             frequencyUpgrades++;
             upgradedVendFrequency = GetUpgradedVendFrequency();
@@ -133,6 +133,9 @@ public class Factory
         var factoryData = new FactoryData();
         factoryData.moneyToVend = baseMoneyToVend;
         factoryData.baseVendFrequency = baseVendFrequency;
+
+        factoryData.moneyUpgrades = moneyUpgrades;
+        factoryData.frequencyUpgrades = frequencyUpgrades;
 
         factoryData.lastVendTimeString = lastVendTime.ToString();
 

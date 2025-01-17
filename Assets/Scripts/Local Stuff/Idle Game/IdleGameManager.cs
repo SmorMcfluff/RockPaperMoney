@@ -49,7 +49,7 @@ public class IdleGameManager : MonoBehaviour
         var newFactoryJsonString = JsonUtility.ToJson(newFactory);
 
         factories.Add(newFactory);
-        
+
         IdleGameUIManager.Instance.UpdateFactoryText();
         FactoryStore.Instance.SetFactoryPrice();
 

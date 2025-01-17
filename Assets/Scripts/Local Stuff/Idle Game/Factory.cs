@@ -107,6 +107,7 @@ public class Factory
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-moneyUpgradePrice);
 
             SetMoneyUpgradePrice();
+            IdleGameUIManager.Instance.UpdateMoneyText();
 
             SaveDataManager.Instance.SavePlayer();
         }
@@ -120,6 +121,7 @@ public class Factory
             frequencyUpgrades++;
             upgradedVendFrequency = GetUpgradedVendFrequency();
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-frequencyUpgradePrice);
+            IdleGameUIManager.Instance.UpdateMoneyText();
 
             SetFrequencyUpgradePrice();
 

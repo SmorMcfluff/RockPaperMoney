@@ -19,7 +19,6 @@ public class FactoryStore : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -5,9 +6,15 @@ public class IdleGameUIManager : MonoBehaviour
 {
     public static IdleGameUIManager Instance;
 
+    [SerializeField] private GameObject factoryUIPrefab;
+    private List<GameObject> factoryUIObjects = new();
+
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI factoryText;
     [SerializeField] private TextMeshProUGUI priceText;
+
+    [SerializeField] private GameObject factoryView;
+    [SerializeField] private RectTransform factoryViewContent;
 
 
     private void Awake()
@@ -19,9 +26,9 @@ public class IdleGameUIManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
+
 
     public void UpdateAllText()
     {
@@ -34,6 +41,7 @@ public class IdleGameUIManager : MonoBehaviour
     public void UpdateMoneyText()
     {
         moneyText.text = "Balance: $" + SaveDataManager.Instance.localPlayerData.moneyBalance;
+        UpdatePriceText(FactoryStore.Instance.CheckIfAffordable());
     }
 
 
@@ -46,7 +54,7 @@ public class IdleGameUIManager : MonoBehaviour
     {
         priceText.text = "$" + FactoryStore.Instance.factoryPrice.ToString("F2");
 
-        if(canAfford)
+        if (canAfford)
         {
             priceText.color = Color.green;
         }
@@ -54,5 +62,60 @@ public class IdleGameUIManager : MonoBehaviour
         {
             priceText.color = Color.red;
         }
+    }
+
+
+    public void GenerateFactoryUIList()
+    {
+        GenerateFactoryUIs();
+        SetFactoryUIListSize();
+    }
+
+    public void ClearFactoryUIList()
+    {
+        foreach (GameObject go in factoryUIObjects)
+        {
+            Destroy(go);
+        }
+
+        factoryUIObjects.Clear();
+    }
+
+
+    private void GenerateFactoryUIs()
+    {
+        int factoryCount = IdleGameManager.Instance.factories.Count;
+        for (int i = 0; i < factoryCount; i++)
+        {
+            GameObject newFactoryUIObject = Instantiate(factoryUIPrefab, factoryViewContent);
+            newFactoryUIObject.GetComponent<FactoryUI>().Construct(i);
+
+            factoryUIObjects.Add(newFactoryUIObject);
+        }
+    }
+
+
+    private void SetFactoryUIListSize()
+    {
+        int factoryCount = IdleGameManager.Instance.factories.Count;
+
+        float width = factoryViewContent.sizeDelta.x;
+        float height = 128 + (factoryCount * 320);
+        factoryViewContent.sizeDelta = new(width, height);
+    }
+
+
+    public void SetFactoryView(bool status)
+    {
+        if (status)
+        {
+            GenerateFactoryUIList();
+        }
+        else
+        {
+            ClearFactoryUIList();
+        }
+
+        factoryView.SetActive(status);
     }
 }

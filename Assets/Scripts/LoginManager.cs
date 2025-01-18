@@ -3,12 +3,17 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using TMPro;
+using UnityEditor.PackageManager;
 
-public class FirebaseTest : MonoBehaviour
+public class LoginManager : MonoBehaviour
 {
     FirebaseAuth auth;
 
-    void Start()
+    [SerializeField] TMP_InputField emailField;
+    [SerializeField] TMP_InputField passwordField;
+
+    public void Start()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
@@ -19,34 +24,20 @@ public class FirebaseTest : MonoBehaviour
         });
     }
 
-    private void AnonymousSignIn()
+
+    public void ButtonPressed()
     {
-        auth.SignInAnonymouslyAsync().ContinueWithOnMainThread(task => {
-            if (task.Exception != null)
-            {
-                Debug.LogWarning(task.Exception);
-            }
-            else
-            {
-                FirebaseUser newUser = task.Result.User;
-                Debug.LogFormat("User signed in successfully: {0} ({1})",
-                    newUser.DisplayName, newUser.UserId);
-            }
-        });
+        string email = emailField.text;
+        string password = passwordField.text;
+
+        Debug.Log(email + ", " + password);
+
+        if(!string.IsNullOrEmpty(email))
+        {
+            RegisterNewUser(email, password);
+        }
     }
 
-    private void DataTest(string userID, string data)
-    {
-        Debug.Log("Trying to write data...");
-        var db = FirebaseDatabase.DefaultInstance;
-        db.RootReference.Child("users").Child(userID).SetValueAsync(data).ContinueWithOnMainThread(task =>
-        {
-            if (task.Exception != null)
-                Debug.LogWarning(task.Exception);
-            else
-                Debug.Log("DataTestWrite: Complete");
-        });
-    }
 
     private void RegisterNewUser(string email, string password)
     {
@@ -60,8 +51,9 @@ public class FirebaseTest : MonoBehaviour
             else
             {
                 FirebaseUser newUser = task.Result.User;
-                Debug.LogFormat("User Registerd: {0} ({1})",
+                Debug.LogFormat("User Registered: {0} ({1})",
                   newUser.DisplayName, newUser.UserId);
+                DataTest(newUser.UserId, "abc123");
             }
         });
     }
@@ -83,9 +75,16 @@ public class FirebaseTest : MonoBehaviour
         });
     }
 
-    private void SignOut()
+    private void DataTest(string userID, string data)
     {
-        auth.SignOut();
-        Debug.Log("User signed out");
+        Debug.Log("Trying to write data...");
+        var db = FirebaseDatabase.DefaultInstance;
+        db.RootReference.Child("users").Child(userID).SetValueAsync(data).ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+                Debug.LogWarning(task.Exception);
+            else
+                Debug.Log("DataTestWrite: Complete");
+        });
     }
 }

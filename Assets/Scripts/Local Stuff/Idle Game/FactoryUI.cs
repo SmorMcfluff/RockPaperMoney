@@ -9,9 +9,6 @@ public class FactoryUI : MonoBehaviour
     private float vendAmount;
     private float vendFrequency;
 
-    private int moneyUpgrades;
-    private int frequencyUpgrades;
-
     [SerializeField] private TextMeshProUGUI factoryStatsText;
 
     [SerializeField] private TextMeshProUGUI moneyUpgradePriceText;
@@ -33,9 +30,6 @@ public class FactoryUI : MonoBehaviour
 
         vendAmount = parentFactory.GetUpgradedMoneyToVend();
         vendFrequency = parentFactory.GetUpgradedVendFrequency();
-
-        moneyUpgrades = parentFactory.moneyUpgrades;
-        frequencyUpgrades = parentFactory.frequencyUpgrades;
 
         moneyUpgradeButton.onClick.AddListener(delegate { UpgradeFactory(UpgradeType.money); });
         frequencyUpgradeButton.onClick.AddListener(delegate { UpgradeFactory(UpgradeType.frequency); });

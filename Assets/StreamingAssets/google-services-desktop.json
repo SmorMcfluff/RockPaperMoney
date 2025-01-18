@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "941761177549",
+    "firebase_url": "https://rockpapermoney-e6e94-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "rockpapermoney-e6e94",
+    "storage_bucket": "rockpapermoney-e6e94.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941761177549:android:ad7f4722fffede51774684",
+        "android_client_info": {
+          "package_name": "com.Mcfluff.RPSGame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBtLvd7NKc2LKXTEsTyXrNrMfYMNFpbbs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

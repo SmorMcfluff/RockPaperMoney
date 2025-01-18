@@ -116,7 +116,7 @@ public class Factory
 
     public void UpgradeFrequency()
     {
-        if (frequencyUpgrades < 15 && float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance) >= frequencyUpgradePrice)
+        if (frequencyUpgrades < 14 && float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance) >= frequencyUpgradePrice)
         {
             frequencyUpgrades++;
             upgradedVendFrequency = GetUpgradedVendFrequency();

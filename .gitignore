@@ -11,6 +11,7 @@
 /[Uu]ser[Ss]ettings/
 /Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.bundle
 /Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.so
+/Assets/google-services.json
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

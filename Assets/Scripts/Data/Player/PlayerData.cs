@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 
 public class PlayerData
 {
@@ -17,13 +18,18 @@ public class PlayerData
 
     public void ChangeMoneyBalance(float amount)
     {
-        float moneyAmount = float.Parse(moneyBalance);
+        UnityEngine.Debug.Log("moneyBalance " + moneyBalance);
+        
+        float moneyAmount = float.Parse(moneyBalance, CultureInfo.InvariantCulture);
+        UnityEngine.Debug.Log("moneyAmount " + moneyAmount);
         moneyAmount += amount;
-        moneyBalance = moneyAmount.ToString("F2");
+        UnityEngine.Debug.Log("MONEY AMOUNT TO STRING: " + moneyAmount.ToString(CultureInfo.InvariantCulture));
+        moneyBalance = moneyAmount.ToString("F2", CultureInfo.InvariantCulture);
     }
 
     public float GetMoneyBalance()
     {
-        return float.Parse(moneyBalance);
+        UnityEngine.Debug.Log("moneyBalance: " + moneyBalance);
+        return float.Parse(moneyBalance, CultureInfo.InvariantCulture);
     }
 }

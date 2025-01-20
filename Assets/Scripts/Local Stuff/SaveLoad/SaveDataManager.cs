@@ -1,4 +1,9 @@
+using Firebase.Auth;
+using Firebase.Database;
+using Firebase.Extensions;
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveDataManager : MonoBehaviour
 {
@@ -14,57 +19,107 @@ public class SaveDataManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
-        LoadPlayer();
+        localPlayerData = new PlayerData();
+        DontDestroyOnLoad(gameObject);
     }
+
 
     private void Start()
     {
-        IdleGameUIManager.Instance.UpdateAllText();
-        Instance.InvokeRepeating(nameof(SavePlayer), 3, 30);
+        //InvokeRepeating(nameof(SavePlayer), 3, 30);
     }
 
 
-    public static void LoadPlayer()
+    public void LoadPlayer()
     {
-        Instance.localPlayerData = new PlayerData();
+        Debug.Log("Loading Player");
+        var db = FirebaseDatabase.DefaultInstance;
+        var auth = FirebaseAuth.DefaultInstance;
 
-
-        if (string.IsNullOrEmpty(PlayerPrefs.GetString("PlayerSaveData")))
+        if (auth.CurrentUser == null)
         {
-            Instance.SavePlayer(); //Make an empty save state - a new player
+            Debug.LogError("No authenticated user found.");
+            return;
         }
 
-        var loadedJson = PlayerPrefs.GetString("PlayerSaveData");
+        var userID = auth.CurrentUser.UserId;
 
-        var saveData = JsonUtility.FromJson<PlayerData>(loadedJson);
-        Instance.localPlayerData = saveData;
-
-        Debug.Log(JsonUtility.ToJson(Instance.localPlayerData));
-
-        if (Instance.localPlayerData.factoriesJsonStrings.Count > 0)
+        db.RootReference.Child("users").Child(userID).GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            for (int i = 0; i < Instance.localPlayerData.factoriesJsonStrings.Count; i++)
+            if (task.Exception != null)
             {
-                IdleGameManager.Instance.LoadFactory(i);
+                Debug.LogError("Firebase Task Exception: " + task.Exception);
+                return;
             }
+
+            DataSnapshot snap = task.Result;
+            if (snap == null || snap.GetRawJsonValue() == null)
+            {
+                Debug.LogWarning("Data snapshot is null or empty.");
+                return;
+            }
+
+            string rawJson = snap.GetRawJsonValue();
+            Debug.Log("RawJSON: " + rawJson);
+            try
+            {
+                string cleanedJson = System.Text.RegularExpressions.Regex.Unescape(rawJson).Trim('"');
+                Debug.Log("cleanedJson: " + cleanedJson);
+                localPlayerData = JsonUtility.FromJson<PlayerData>(cleanedJson);
+                Debug.Log("localPlayerData: " + localPlayerData);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Deserialization failed: " + ex.Message);
+                return;
+            }
+
+            if (localPlayerData.factoriesJsonStrings != null && localPlayerData.factoriesJsonStrings.Count > 0)
+            {
+                for (int i = 0; i < localPlayerData.factoriesJsonStrings.Count; i++)
+                {
+                    IdleGameManager.Instance.LoadFactory(i);
+                }
+            }
+        });
+
+        if (IdleGameUIManager.Instance != null)
+        {
+            IdleGameUIManager.Instance.UpdateAllText();
         }
     }
 
 
     public void SavePlayer()
     {
-        for (int i = 0; i < Instance.localPlayerData.factoriesJsonStrings.Count; i++)
+        var db = FirebaseDatabase.DefaultInstance;
+        var auth = FirebaseAuth.DefaultInstance;
+
+        if (localPlayerData == null)
         {
-            SaveFactory(i);
+            localPlayerData = new PlayerData();
         }
 
-        PlayerData saveData = Instance.localPlayerData;
 
-        string jsonString = JsonUtility.ToJson(saveData);
+        int factoryCount = IdleGameManager.Instance.factories.Count;
+        if (factoryCount > 0)
+        {
+            for (int i = 0; i < factoryCount; i++)
+            {
+                SaveFactory(i);
+            }
+        }
 
-        PlayerPrefs.SetString("PlayerSaveData", jsonString);
+        var userID = auth.CurrentUser.UserId;
+        var data = JsonUtility.ToJson(localPlayerData);
+        db.RootReference.Child("users").Child(userID).SetValueAsync(data).ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                Debug.LogWarning(task.Exception);
+            }
+        });
     }
 
 
@@ -77,12 +132,18 @@ public class SaveDataManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        SavePlayer();
+        if (!SceneManager.GetActiveScene().name.Contains("Login"))
+        {
+            SavePlayer();
+        }
     }
 
 
     private void OnApplicationFocus(bool focus)
     {
-        SavePlayer();
+        if (!SceneManager.GetActiveScene().name.Contains("Login"))
+        {
+            SavePlayer();
+        }
     }
 }

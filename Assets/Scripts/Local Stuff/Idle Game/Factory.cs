@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 
 
@@ -43,7 +44,7 @@ public class Factory
 
         upgradedVendFrequency = GetUpgradedVendFrequency();
 
-        lastVendTime = DateTime.Parse(factoryData.lastVendTimeString);
+        lastVendTime = DateTime.Parse(factoryData.lastVendTimeString, CultureInfo.InvariantCulture);
 
         SetMoneyUpgradePrice();
         SetFrequencyUpgradePrice();
@@ -69,6 +70,9 @@ public class Factory
         float vendAmount = upgradedMoneyToVend * vendsQueued;
 
         SetTimeStamps();
+        Debug.Log("upgraded Money: " + upgradedMoneyToVend);
+        Debug.Log("vends qued: " + vendsQueued);
+        Debug.Log("vend amonunt: " + vendAmount);
 
         SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(vendAmount);
         IdleGameUIManager.Instance.UpdateMoneyText();
@@ -101,7 +105,8 @@ public class Factory
 
     public void UpgradeMoneyVendAmount()
     {
-        if (moneyUpgrades < 10 && float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance) >= moneyUpgradePrice)
+        float moneyBalance = float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance, CultureInfo.InvariantCulture);
+        if (moneyUpgrades < 10 && moneyBalance >= moneyUpgradePrice)
         {
             moneyUpgrades++;
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-moneyUpgradePrice);
@@ -116,7 +121,8 @@ public class Factory
 
     public void UpgradeFrequency()
     {
-        if (frequencyUpgrades < 14 && float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance) >= frequencyUpgradePrice)
+        string moneyBalance = SaveDataManager.Instance.localPlayerData.moneyBalance;
+        if (frequencyUpgrades < 14 && float.Parse(moneyBalance, CultureInfo.InvariantCulture) >= frequencyUpgradePrice)
         {
             frequencyUpgrades++;
             upgradedVendFrequency = GetUpgradedVendFrequency();

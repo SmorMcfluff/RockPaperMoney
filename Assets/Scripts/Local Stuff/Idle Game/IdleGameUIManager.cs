@@ -29,6 +29,10 @@ public class IdleGameUIManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        //UpdateAllText();
+    }
 
     public void UpdateAllText()
     {

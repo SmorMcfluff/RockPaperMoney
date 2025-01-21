@@ -44,9 +44,25 @@ public class FactoryUI : MonoBehaviour
         vendAmount = parentFactory.GetUpgradedMoneyToVend();
         vendFrequency = parentFactory.GetUpgradedVendFrequency();
 
-        factoryStatsText.text = $"${vendAmount.ToString("F2")}/{vendFrequency}s";
-        moneyUpgradePriceText.text = $"${parentFactory.moneyUpgradePrice.ToString("F2")}";
-        frequencyUpgradePriceText.text = $"${parentFactory.frequencyUpgradePrice.ToString("F2")}";
+        factoryStatsText.text = $"${vendAmount:F2}/{vendFrequency}s";
+
+        if(parentFactory.moneyUpgrades < 10)
+        {
+            moneyUpgradePriceText.text = $"${parentFactory.moneyUpgradePrice:F2}";
+        }
+        else
+        {
+            moneyUpgradePriceText.text = "--";
+        }
+
+        if(parentFactory.frequencyUpgrades < 14)
+        {
+            frequencyUpgradePriceText.text = $"${parentFactory.frequencyUpgradePrice:F2}";
+        }
+        else
+        {
+            frequencyUpgradePriceText.text = "--";
+        }
     }
 
     private void UpgradeFactory(UpgradeType upgradeType)

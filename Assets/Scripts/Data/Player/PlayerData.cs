@@ -18,18 +18,13 @@ public class PlayerData
 
     public void ChangeMoneyBalance(float amount)
     {
-        UnityEngine.Debug.Log("moneyBalance " + moneyBalance);
-        
         float moneyAmount = float.Parse(moneyBalance, CultureInfo.InvariantCulture);
-        UnityEngine.Debug.Log("moneyAmount " + moneyAmount);
         moneyAmount += amount;
-        UnityEngine.Debug.Log("MONEY AMOUNT TO STRING: " + moneyAmount.ToString(CultureInfo.InvariantCulture));
         moneyBalance = moneyAmount.ToString("F2", CultureInfo.InvariantCulture);
     }
 
     public float GetMoneyBalance()
     {
-        UnityEngine.Debug.Log("moneyBalance: " + moneyBalance);
         return float.Parse(moneyBalance, CultureInfo.InvariantCulture);
     }
 }

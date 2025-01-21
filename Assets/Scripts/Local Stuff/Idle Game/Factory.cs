@@ -70,9 +70,6 @@ public class Factory
         float vendAmount = upgradedMoneyToVend * vendsQueued;
 
         SetTimeStamps();
-        Debug.Log("upgraded Money: " + upgradedMoneyToVend);
-        Debug.Log("vends qued: " + vendsQueued);
-        Debug.Log("vend amonunt: " + vendAmount);
 
         SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(vendAmount);
         IdleGameUIManager.Instance.UpdateMoneyText();
@@ -113,6 +110,8 @@ public class Factory
 
             SetMoneyUpgradePrice();
             IdleGameUIManager.Instance.UpdateMoneyText();
+            IdleGameManager.Instance.GetMoneyPerMinute();
+            IdleGameUIManager.Instance.UpdateEfficiencyText();
 
             SaveDataManager.Instance.SavePlayer();
         }
@@ -128,6 +127,9 @@ public class Factory
             upgradedVendFrequency = GetUpgradedVendFrequency();
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-frequencyUpgradePrice);
             IdleGameUIManager.Instance.UpdateMoneyText();
+
+            IdleGameManager.Instance.GetMoneyPerMinute();
+            IdleGameUIManager.Instance.UpdateEfficiencyText();
 
             SetFrequencyUpgradePrice();
 

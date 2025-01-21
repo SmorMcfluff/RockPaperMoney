@@ -3,44 +3,49 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using TMPro;
-using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
 
 public class LoginManager : MonoBehaviour
 {
+    public static LoginManager Instance;
+
     FirebaseAuth auth;
 
-    [SerializeField] TMP_InputField emailField;
-    [SerializeField] TMP_InputField passwordField;
-    [SerializeField] TextMeshProUGUI errorText;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void Start()
     {
-        passwordField.contentType = TMP_InputField.ContentType.Password;
-
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
+            {
                 Debug.LogError(task.Exception);
+            }
 
             auth = FirebaseAuth.DefaultInstance;
         });
+
+        if (FirebaseAuth.DefaultInstance.CurrentUser != null)
+        {
+            SaveDataManager.Instance.LoadPlayer();
+            SceneController.Instance.GoToScene("MainMenu");
+        }
     }
 
 
-    public void ButtonPressed()
+    public void RegisterNewUser(string email, string password)
     {
-        string email = emailField.text;
-        string password = passwordField.text;
-
-        Debug.Log(email + ", " + password);
-
-        RegisterNewUser(email, password);
-    }
-
-
-    private void RegisterNewUser(string email, string password)
-    {
-        Debug.Log("Starting Registration");
         auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
             string message = "";
@@ -69,13 +74,13 @@ public class LoginManager : MonoBehaviour
                         Debug.LogWarning(task.Exception);
                         break;
                 }
-                errorText.text = message;
+                FindAnyObjectByType<LoginFieldKeeper>().errorText.text = message;
                 Debug.Log(message);
             }
             else
             {
                 FirebaseUser newUser = task.Result.User;
-                errorText.text = "User Registered!";
+                FindAnyObjectByType<LoginFieldKeeper>().errorText.text = "User Registered!";
                 var saveData = SaveDataManager.Instance.localPlayerData;
                 SaveDataManager.Instance.SavePlayer();
             }
@@ -118,15 +123,21 @@ public class LoginManager : MonoBehaviour
                 }
                 Debug.Log(message);
 
-                errorText.text = message;
+                FindAnyObjectByType<LoginFieldKeeper>().errorText.text = message;
             }
             else
             {
                 FirebaseUser newUser = task.Result.User;
                 Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
                 SaveDataManager.Instance.LoadPlayer();
-                SceneManager.LoadScene("IdleGameScene");
+                SceneController.Instance.GoToScene("MainMenu");
             }
         });
+    }
+
+    public void SignOut()
+    {
+        auth.SignOut();
+        SceneController.Instance.GoToScene("Login");
     }
 }

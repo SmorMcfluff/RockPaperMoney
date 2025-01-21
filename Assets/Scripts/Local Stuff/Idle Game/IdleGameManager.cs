@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IdleGameManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class IdleGameManager : MonoBehaviour
     public static IdleGameManager Instance;
 
     public List<Factory> factories = new List<Factory>();
+
+    [DoNotSerialize] public float moneyPerMinute;
 
     private void Awake()
     {
@@ -16,17 +19,18 @@ public class IdleGameManager : MonoBehaviour
         else
         {
             Instance = this;
+            SaveDataManager.Instance.LoadPlayer();
         }
+    }
+
+    private void Start()
+    {
+        SaveDataManager.Instance.InvokeRepeating(nameof(SaveDataManager.Instance.SavePlayer), 3, 30);
     }
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            AddFactory();
-        }
-
         HandleFactories();
     }
 
@@ -49,8 +53,9 @@ public class IdleGameManager : MonoBehaviour
 
         factories.Add(newFactory);
 
-        IdleGameUIManager.Instance.UpdateAllText();
+        GetMoneyPerMinute();
         FactoryStore.Instance.SetFactoryPrice();
+        IdleGameUIManager.Instance.UpdateAllText();
 
         SaveDataManager.Instance.localPlayerData.factoriesJsonStrings.Add(newFactoryJsonString);
         SaveDataManager.Instance.SavePlayer();
@@ -63,11 +68,26 @@ public class IdleGameManager : MonoBehaviour
         var newFactoryJsonString = SaveDataManager.Instance.localPlayerData.factoriesJsonStrings[i];
         FactoryData newFactoryData = JsonUtility.FromJson<FactoryData>(newFactoryJsonString);
 
-        Debug.Log("Loading factory: " + newFactoryJsonString);
         var newFactory = new Factory(newFactoryData);
         factories.Add(newFactory);
 
+        GetMoneyPerMinute();
         FactoryStore.Instance.SetFactoryPrice();
         IdleGameUIManager.Instance.UpdateAllText();
+    }
+
+    public void GetMoneyPerMinute()
+    {
+        float productionPerSecond = 0;
+        foreach (var factory in factories)
+        {
+            float factoryProduction = factory.GetUpgradedMoneyToVend();
+            float factoryFrequency = factory.GetUpgradedVendFrequency();
+
+            float factoryEfficiency = (factoryProduction / factoryFrequency);
+            productionPerSecond += factoryEfficiency;
+        }
+
+        moneyPerMinute = productionPerSecond * 60;
     }
 }

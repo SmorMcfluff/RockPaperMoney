@@ -25,15 +25,14 @@ public class SaveDataManager : MonoBehaviour
     }
 
 
-    private void Start()
+    public static object GetCurrentTimeStampForFirebaseServer()
     {
-        //InvokeRepeating(nameof(SavePlayer), 3, 30);
+        return ServerValue.Timestamp;
     }
 
 
     public void LoadPlayer()
     {
-        Debug.Log("Loading Player");
         var db = FirebaseDatabase.DefaultInstance;
         var auth = FirebaseAuth.DefaultInstance;
 
@@ -61,13 +60,10 @@ public class SaveDataManager : MonoBehaviour
             }
 
             string rawJson = snap.GetRawJsonValue();
-            Debug.Log("RawJSON: " + rawJson);
             try
             {
                 string cleanedJson = System.Text.RegularExpressions.Regex.Unescape(rawJson).Trim('"');
-                Debug.Log("cleanedJson: " + cleanedJson);
                 localPlayerData = JsonUtility.FromJson<PlayerData>(cleanedJson);
-                Debug.Log("localPlayerData: " + localPlayerData);
             }
             catch (Exception ex)
             {
@@ -93,33 +89,39 @@ public class SaveDataManager : MonoBehaviour
 
     public void SavePlayer()
     {
-        var db = FirebaseDatabase.DefaultInstance;
-        var auth = FirebaseAuth.DefaultInstance;
-
-        if (localPlayerData == null)
+        if (FirebaseAuth.DefaultInstance.CurrentUser != null)
         {
-            localPlayerData = new PlayerData();
-        }
 
+            var db = FirebaseDatabase.DefaultInstance;
+            var auth = FirebaseAuth.DefaultInstance;
 
-        int factoryCount = IdleGameManager.Instance.factories.Count;
-        if (factoryCount > 0)
-        {
-            for (int i = 0; i < factoryCount; i++)
+            if (localPlayerData == null)
             {
-                SaveFactory(i);
+                localPlayerData = new PlayerData();
             }
-        }
 
-        var userID = auth.CurrentUser.UserId;
-        var data = JsonUtility.ToJson(localPlayerData);
-        db.RootReference.Child("users").Child(userID).SetValueAsync(data).ContinueWithOnMainThread(task =>
-        {
-            if (task.Exception != null)
+            if (IdleGameManager.Instance != null)
             {
-                Debug.LogWarning(task.Exception);
+                int factoryCount = IdleGameManager.Instance.factories.Count;
+                if (factoryCount > 0)
+                {
+                    for (int i = 0; i < factoryCount; i++)
+                    {
+                        SaveFactory(i);
+                    }
+                }
             }
-        });
+
+            var userID = auth.CurrentUser.UserId;
+            var data = JsonUtility.ToJson(localPlayerData);
+            db.RootReference.Child("users").Child(userID).SetValueAsync(data).ContinueWithOnMainThread(task =>
+            {
+                if (task.Exception != null)
+                {
+                    Debug.LogWarning(task.Exception);
+                }
+            });
+        }
     }
 
 

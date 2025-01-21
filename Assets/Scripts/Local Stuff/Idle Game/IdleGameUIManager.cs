@@ -12,6 +12,8 @@ public class IdleGameUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI factoryText;
     [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI efficiencyText;
+
 
     [SerializeField] private GameObject factoryView;
     [SerializeField] private RectTransform factoryViewContent;
@@ -31,7 +33,6 @@ public class IdleGameUIManager : MonoBehaviour
 
     private void Start()
     {
-        //UpdateAllText();
     }
 
     public void UpdateAllText()
@@ -39,6 +40,7 @@ public class IdleGameUIManager : MonoBehaviour
         UpdateMoneyText();
         UpdateFactoryText();
         UpdatePriceText(FactoryStore.Instance.CheckIfAffordable());
+        UpdateEfficiencyText();
     }
 
 
@@ -53,6 +55,7 @@ public class IdleGameUIManager : MonoBehaviour
     {
         factoryText.text = "Factories: " + IdleGameManager.Instance.factories.Count;
     }
+
 
     public void UpdatePriceText(bool canAfford)
     {
@@ -69,6 +72,12 @@ public class IdleGameUIManager : MonoBehaviour
     }
 
 
+    public void UpdateEfficiencyText()
+    {
+        efficiencyText.text = $"${IdleGameManager.Instance.moneyPerMinute:F2}/min";
+    }
+
+    
     public void GenerateFactoryUIList()
     {
         GenerateFactoryUIs();

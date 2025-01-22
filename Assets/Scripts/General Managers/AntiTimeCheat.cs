@@ -27,6 +27,7 @@ public class AntiTimeCheat : MonoBehaviour
         }
     }
 
+
     private void OnApplicationFocus(bool focus)
     {
         if (CheckForTimeCheat())
@@ -36,6 +37,7 @@ public class AntiTimeCheat : MonoBehaviour
         }
     }
 
+
     private bool CheckForTimeCheat()
     {
         var networkTime = NTPTimeFetcher.GetNetworkTime();
@@ -43,6 +45,6 @@ public class AntiTimeCheat : MonoBehaviour
 
         var timeDifference = (networkTime - systemTime).Duration();
 
-        return (timeDifference > acceptableRange);
+        return (timeDifference > acceptableRange);  
     }
 }

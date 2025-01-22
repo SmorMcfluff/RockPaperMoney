@@ -1917,10 +1917,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3667006212033303100, guid: b0cae22626246d84aaf943f0fd39bdcc, type: 3}
-      propertyPath: cheatDetectedBox
-      value: 
-      objectReference: {fileID: 6100516051459158363, guid: 58d2061b9cc34a041b10c526069c1de7, type: 3}
     - target: {fileID: 4237240249823180918, guid: b0cae22626246d84aaf943f0fd39bdcc, type: 3}
       propertyPath: m_Name
       value: Universal Manager Object

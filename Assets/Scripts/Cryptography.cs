@@ -57,6 +57,7 @@ public static class Cryptography
         }
     }
 
+
     public static string Decrypt(string cipherText, string passPhrase)
     {
         // Get the complete stream of bytes that represent:
@@ -91,6 +92,7 @@ public static class Cryptography
             }
         }
     }
+
 
     private static byte[] Generate256BitsOfRandomEntropy()
     {

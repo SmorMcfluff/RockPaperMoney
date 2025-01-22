@@ -2,6 +2,7 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
+using Firebase.Database;
 
 public class LoginManager : MonoBehaviour
 {
@@ -20,7 +21,10 @@ public class LoginManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        GetKey();
     }
+
+
 
     public void Start()
     {
@@ -137,10 +141,27 @@ public class LoginManager : MonoBehaviour
         });
     }
 
+
     private void SaveCredentials(string email, string password)
     {
-        PlayerPrefs.SetString("email", email);
-        PlayerPrefs.SetString("password", password);
+        var key = GetKey();
+
+        var encryptedEmail = Cryptography.Encrypt(email, key);
+        var encryptedPassword = Cryptography.Encrypt(password, key);
+
+        PlayerPrefs.SetString("email", encryptedEmail);
+        PlayerPrefs.SetString("password", encryptedPassword);
+    }
+
+
+    private static string GetKey()
+    {
+        FirebaseDatabase.DefaultInstance.RootReference.Child("key").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            string key = task.Result.GetRawJsonValue();
+            return key.Trim('"');
+        });
+        return "";
     }
 
 
@@ -156,8 +177,10 @@ public class LoginManager : MonoBehaviour
 
     private string[] GetCredentials()
     {
-        string email = PlayerPrefs.GetString("email");
-        string password = PlayerPrefs.GetString("password");
+        var key = GetKey();
+
+        string email = Cryptography.Decrypt(PlayerPrefs.GetString("email"), key);
+        string password = Cryptography.Decrypt(PlayerPrefs.GetString("password"), key);
 
         string[] credentials = { email, password };
         return credentials;

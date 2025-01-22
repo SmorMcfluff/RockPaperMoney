@@ -2,9 +2,19 @@ using UnityEngine;
 
 public class ScreenManager : MonoBehaviour
 {
-    void Awake()
+    public static ScreenManager Instance;
+
+    private void Awake()
     {
-        Camera.main.aspect = 0.5625f;
-        Application.targetFrameRate = 60;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            Application.targetFrameRate = 60;
+        }
     }
 }

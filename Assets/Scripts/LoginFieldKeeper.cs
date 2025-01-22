@@ -9,8 +9,8 @@ public class LoginFieldKeeper : MonoBehaviour
     
     public void ButtonPressed()
     {
-        string email = FindAnyObjectByType<LoginFieldKeeper>().emailField.text;
-        string password = FindAnyObjectByType<LoginFieldKeeper>().passwordField.text;
+        string email = emailField.text;
+        string password = passwordField.text;
 
         LoginManager.Instance.RegisterNewUser(email, password);
     }

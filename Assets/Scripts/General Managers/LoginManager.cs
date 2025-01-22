@@ -2,8 +2,6 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
-using TMPro;
-using UnityEngine.Timeline;
 
 public class LoginManager : MonoBehaviour
 {
@@ -20,8 +18,8 @@ public class LoginManager : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
     }
 
     public void Start()
@@ -34,13 +32,8 @@ public class LoginManager : MonoBehaviour
             }
 
             auth = FirebaseAuth.DefaultInstance;
+            CheckCredentials();
         });
-
-        if (FirebaseAuth.DefaultInstance.CurrentUser != null)
-        {
-            SaveDataManager.Instance.LoadPlayer();
-            SceneController.Instance.GoToScene("MainMenu");
-        }
     }
 
 
@@ -80,9 +73,14 @@ public class LoginManager : MonoBehaviour
             else
             {
                 FirebaseUser newUser = task.Result.User;
+
+                SaveCredentials(email, password);
+
                 FindAnyObjectByType<LoginFieldKeeper>().errorText.text = "User Registered!";
                 var saveData = SaveDataManager.Instance.localPlayerData;
+
                 SaveDataManager.Instance.SavePlayer();
+                Invoke(nameof(SignIn), 1.5f);
             }
         });
     }
@@ -127,17 +125,51 @@ public class LoginManager : MonoBehaviour
             }
             else
             {
+
                 FirebaseUser newUser = task.Result.User;
+                SaveCredentials(email, password);
+
                 Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
+
                 SaveDataManager.Instance.LoadPlayer();
                 SceneController.Instance.GoToScene("MainMenu");
             }
         });
     }
 
+    private void SaveCredentials(string email, string password)
+    {
+        PlayerPrefs.SetString("email", email);
+        PlayerPrefs.SetString("password", password);
+    }
+
+
+    private void CheckCredentials()
+    {
+        if (!string.IsNullOrEmpty(PlayerPrefs.GetString("email")) && !string.IsNullOrEmpty(PlayerPrefs.GetString("password")))
+        {
+            string[] credentials = GetCredentials();
+            RegisterNewUser(credentials[0], credentials[1]);
+        }
+    }
+
+
+    private string[] GetCredentials()
+    {
+        string email = PlayerPrefs.GetString("email");
+        string password = PlayerPrefs.GetString("password");
+
+        string[] credentials = { email, password };
+        return credentials;
+    }
+
+
     public void SignOut()
     {
         auth.SignOut();
+        PlayerPrefs.DeleteKey("email");
+        PlayerPrefs.DeleteKey("password");
+
         SceneController.Instance.GoToScene("Login");
     }
 }

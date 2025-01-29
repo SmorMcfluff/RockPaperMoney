@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6125949930607600123}
   - component: {fileID: 7211438488813808662}
   - component: {fileID: 3667006212033303100}
+  - component: {fileID: 3938718090949720168}
   m_Layer: 0
   m_Name: Universal Manager Object
   m_TagString: Untagged
@@ -97,3 +98,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cheatDetectedBox: {fileID: 6100516051459158363, guid: 58d2061b9cc34a041b10c526069c1de7, type: 3}
+--- !u!114 &3938718090949720168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4237240249823180918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad85d3b0cc824a4bbbc00dca01c24f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

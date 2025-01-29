@@ -20,6 +20,7 @@ public class SaveDataManager : MonoBehaviour
         {
             Instance = this;
         }
+
         localPlayerData = new PlayerData();
         DontDestroyOnLoad(gameObject);
     }
@@ -91,7 +92,6 @@ public class SaveDataManager : MonoBehaviour
     {
         if (FirebaseAuth.DefaultInstance.CurrentUser != null)
         {
-
             var db = FirebaseDatabase.DefaultInstance;
             var auth = FirebaseAuth.DefaultInstance;
 

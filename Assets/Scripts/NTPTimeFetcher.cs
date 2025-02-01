@@ -5,6 +5,7 @@
 */
 
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -18,8 +19,16 @@ public class NTPTimeFetcher
 		var ntpData = new byte[48];
 		ntpData[0] = 0x1B; // Set protocol version
 
-		var addresses = Dns.GetHostAddresses(ntpServer);
-		var ipEndPoint = new IPEndPoint(addresses[0], 123);
+        var addresses = Dns.GetHostAddresses(ntpServer)
+                          .Where(a => a.AddressFamily == AddressFamily.InterNetwork)
+                          .ToArray();
+
+        if (addresses.Length == 0)
+        {
+            throw new Exception("No IPv4 address found for NTP server.");
+        }
+
+        var ipEndPoint = new IPEndPoint(addresses[0], 123);
 
 		using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
 		{

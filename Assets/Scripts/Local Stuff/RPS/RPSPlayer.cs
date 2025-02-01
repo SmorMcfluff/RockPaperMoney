@@ -2,21 +2,30 @@ public class RPSPlayer
 {
     public PlayerData playerData;
 
-    public HandSign handSign = HandSign.Rock;
+    public HandSign handSign = HandSign.Undecided;
 
-    public bool isReady;
     public bool isPlayerA;
+    public bool isReady;
 
 
-    public RPSPlayer(PlayerData data)
+    public string GetPlayerLetter()
     {
-        playerData = data;
+        if (RPSMatchMaking.Instance.localPlayer.isPlayerA)
+        {
+            return "playerA";
+        }
+        else
+        {
+            return "playerB";
+        }
     }
 }
 
 public enum HandSign
 {
+    Undecided,
     Rock,
     Paper,
     Scissors
 }
+

@@ -28,11 +28,8 @@ public class IdleGameUIManager : MonoBehaviour
         else
         {
             Instance = this;
+            UpdateAllText();
         }
-    }
-
-    private void Start()
-    {
     }
 
     public void UpdateAllText()

@@ -31,7 +31,8 @@ public class SceneController : MonoBehaviour
             Screen.orientation = ScreenOrientation.LandscapeLeft;
             return;
         }
-        else if (Screen.orientation != ScreenOrientation.Portrait)
+
+        if (!sceneName.Contains("RPS") && Screen.orientation != ScreenOrientation.Portrait)
         {
             Screen.orientation = ScreenOrientation.Portrait;
         }

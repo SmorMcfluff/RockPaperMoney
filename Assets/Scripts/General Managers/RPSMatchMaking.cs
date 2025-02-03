@@ -139,8 +139,6 @@ public class RPSMatchMaking : MonoBehaviour
     {
         if (!gameIsStarting)
         {
-            Debug.Log("ValueChanged triggered!");
-
             db.RootReference.Child("waitingGames").Child(gameData.gameID).GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.Exception != null)
@@ -185,7 +183,7 @@ public class RPSMatchMaking : MonoBehaviour
         {
             try
             {
-                await RemoveGame();
+                await RemoveWaitingGame();
             }
             catch { }
         }
@@ -200,7 +198,7 @@ public class RPSMatchMaking : MonoBehaviour
     }
 
 
-    public async Task RemoveGame()
+    public async Task RemoveWaitingGame()
     {
         await db.RootReference.Child("waitingGames").Child(gameData.gameID).RemoveValueAsync();
     }
@@ -215,7 +213,7 @@ public class RPSMatchMaking : MonoBehaviour
 
         if (gameData != null && !string.IsNullOrEmpty(gameData.gameID))
         {
-            await RemoveGame();
+            await RemoveWaitingGame();
         }
     }
 
@@ -223,7 +221,7 @@ public class RPSMatchMaking : MonoBehaviour
     {
         if (gameData != null && !string.IsNullOrEmpty(gameData.gameID))
         {
-            await RemoveGame();
+            await RemoveWaitingGame();
 
         }
     }

@@ -8,9 +8,13 @@ public class PlayerData
     public int winCount;
     public int lossCount;
 
-    public bool rockUnlocked = true;
-    public bool paperUnlocked = true;
-    public bool scissorsUnlocked = true;
+    public bool[] unlockedHandSigns = new bool[3]
+    {
+        true, false, false
+    };
+    //public bool rockUnlocked = true;
+    //public bool paperUnlocked = true;
+    //public bool scissorsUnlocked = true;
 
     public string moneyBalance = "0.01";
 

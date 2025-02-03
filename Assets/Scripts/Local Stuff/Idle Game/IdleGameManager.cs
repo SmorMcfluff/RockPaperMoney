@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class IdleGameManager : MonoBehaviour
         else
         {
             Instance = this;
-            SaveDataManager.Instance.LoadPlayer();
+            //SaveDataManager.Instance.LoadPlayer();
         }
     }
 
@@ -65,6 +66,8 @@ public class IdleGameManager : MonoBehaviour
 
     public void LoadFactory(int i)
     {
+        Debug.Log($"loading factory index {i}");
+
         var newFactoryJsonString = SaveDataManager.Instance.localPlayerData.factoriesJsonStrings[i];
         FactoryData newFactoryData = JsonUtility.FromJson<FactoryData>(newFactoryJsonString);
 
@@ -72,9 +75,8 @@ public class IdleGameManager : MonoBehaviour
         factories.Add(newFactory);
 
         GetMoneyPerMinute();
-        FactoryStore.Instance.SetFactoryPrice();
-        IdleGameUIManager.Instance.UpdateAllText();
     }
+
 
     public void GetMoneyPerMinute()
     {

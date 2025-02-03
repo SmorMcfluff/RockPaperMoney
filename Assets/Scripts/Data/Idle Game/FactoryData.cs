@@ -1,7 +1,7 @@
-using System;
-
 public class FactoryData
 {
+    public AdWatcherInfo adWatcherInfo;
+
     public float moneyToVend;
 
     public float baseVendFrequency;
@@ -9,6 +9,5 @@ public class FactoryData
     public int moneyUpgrades;
     public int frequencyUpgrades;
 
-    public DateTime lastVendTime;
     public string lastVendTimeString;
 }

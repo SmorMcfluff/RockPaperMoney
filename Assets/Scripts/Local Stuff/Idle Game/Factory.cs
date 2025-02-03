@@ -72,7 +72,12 @@ public class Factory
         SetTimeStamps();
 
         SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(vendAmount);
-        IdleGameUIManager.Instance.UpdateMoneyText();
+
+        try
+        {
+            IdleGameUIManager.Instance.UpdateMoneyText();
+        }
+        catch { }
     }
 
     public float GetUpgradedMoneyToVend()
@@ -109,9 +114,14 @@ public class Factory
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-moneyUpgradePrice);
 
             SetMoneyUpgradePrice();
-            IdleGameUIManager.Instance.UpdateMoneyText();
             IdleGameManager.Instance.GetMoneyPerMinute();
-            IdleGameUIManager.Instance.UpdateEfficiencyText();
+
+            try
+            {
+                IdleGameUIManager.Instance.UpdateMoneyText();
+                IdleGameUIManager.Instance.UpdateEfficiencyText();
+            }
+            catch { }
 
             SaveDataManager.Instance.SavePlayer();
         }
@@ -126,10 +136,14 @@ public class Factory
             frequencyUpgrades++;
             upgradedVendFrequency = GetUpgradedVendFrequency();
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-frequencyUpgradePrice);
-            IdleGameUIManager.Instance.UpdateMoneyText();
-
             IdleGameManager.Instance.GetMoneyPerMinute();
-            IdleGameUIManager.Instance.UpdateEfficiencyText();
+
+            try
+            {
+                IdleGameUIManager.Instance.UpdateMoneyText();
+                IdleGameUIManager.Instance.UpdateEfficiencyText();
+            }
+            catch { }
 
             SetFrequencyUpgradePrice();
 

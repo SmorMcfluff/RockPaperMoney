@@ -19,7 +19,6 @@ public class RockPaperScissors : MonoBehaviour
     [SerializeField] Button scissorsButton;
 
     [SerializeField] Button readyButton;
-    [SerializeField] Button leaveButton;
 
     [SerializeField] TextMeshProUGUI statusText;
 
@@ -32,16 +31,9 @@ public class RockPaperScissors : MonoBehaviour
 
         handsignButtons = new Button[] { rockButton, paperButton, scissorsButton };
 
-        rockButton.onClick.AddListener(delegate { SetHandSign(HandSign.Rock, 0); });
-        paperButton.onClick.AddListener(delegate { SetHandSign(HandSign.Paper, 1); });
-        scissorsButton.onClick.AddListener(delegate { SetHandSign(HandSign.Scissors, 2); });
-
-        readyButton.onClick.AddListener(delegate { DeclareReady(); });
-        leaveButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("MainMenu"); });
-
-        timer = 0;
+        AddButtonListeners();
+        SetHandSignButtons();
         UpdatePlayerOnFirebase();
-
         Subscribe();
     }
 
@@ -52,7 +44,29 @@ public class RockPaperScissors : MonoBehaviour
     }
 
 
-    public void Timer()
+    private void AddButtonListeners()
+    {
+        rockButton.onClick.AddListener(delegate { SetHandSign(HandSign.Rock, 0); });
+        paperButton.onClick.AddListener(delegate { SetHandSign(HandSign.Paper, 1); });
+        scissorsButton.onClick.AddListener(delegate { SetHandSign(HandSign.Scissors, 2); });
+
+        readyButton.onClick.AddListener(delegate { DeclareReady(); });
+    }
+
+    private void SetHandSignButtons()
+    {
+        var unlockedHandSigns = SaveDataManager.Instance.localPlayerData.unlockedHandSigns;
+        for (int i = 0; i < handsignButtons.Length; i++)
+        {
+            if (!unlockedHandSigns[i])
+            {
+                handsignButtons[i].interactable = false;
+                handsignButtons[i].image.color = Color.gray;
+            }
+        }
+    }
+
+    private void Timer()
     {
         timer += Time.deltaTime;
         if (timer >= roundMaxLength)
@@ -68,15 +82,20 @@ public class RockPaperScissors : MonoBehaviour
         {
             RPSMatchMaking.Instance.localPlayer.handSign = handSign;
 
+            var unlockedHandSigns = SaveDataManager.Instance.localPlayerData.unlockedHandSigns;
             for (int i = 0; i < handsignButtons.Length; i++)
             {
                 if (i == buttonIndex)
                 {
                     handsignButtons[i].image.color = Color.green;
                 }
-                else
+                else if (unlockedHandSigns[i])
                 {
                     handsignButtons[i].image.color = Color.white;
+                }
+                else
+                {
+                    handsignButtons[i].image.color = Color.gray;
                 }
             }
         }
@@ -154,7 +173,7 @@ public class RockPaperScissors : MonoBehaviour
         var currentGame = RPSMatchMaking.Instance.gameData;
         bool playerDisconnected = JsonUtility.ToJson(currentGame).Contains("DISCONNECTED");
 
-        if(playerDisconnected)
+        if (playerDisconnected)
         {
             statusText.text = "Opponent disconnected";
         }
@@ -165,6 +184,8 @@ public class RockPaperScissors : MonoBehaviour
 
     private void EndGame(bool playerDisconnected)
     {
+        var gameData = RPSMatchMaking.Instance.gameData;
+
         var players = SetLocalPlayer();
         RPSPlayer localPlayer = players[0];
         RPSPlayer onlinePlayer = players[1];
@@ -180,14 +201,17 @@ public class RockPaperScissors : MonoBehaviour
             SaveDataManager.Instance.localPlayerData.lossCount++;
         }
 
-        RPSMatchMaking.Instance.gameData.gameResult = gameResult;
+        gameData.gameResult = gameResult;
 
-        var isPlayerA = RPSMatchMaking.Instance.localPlayer.GetPlayerLetter() == "playerA";
+        var isPlayerA = localPlayer.GetPlayerLetter() == "playerA";
 
-        RPSMatchMaking.Instance.gameData.playerA = isPlayerA ? localPlayer : onlinePlayer;
-        RPSMatchMaking.Instance.gameData.playerB = isPlayerA ? onlinePlayer : localPlayer;
+        gameData.playerA = isPlayerA ? localPlayer : onlinePlayer;
+        gameData.playerB = isPlayerA ? onlinePlayer : localPlayer;
 
-        if(!playerDisconnected)
+
+        db.RootReference.Child("games").Child(gameData.gameID).RemoveValueAsync();
+
+        if (!playerDisconnected)
         {
             SaveDataManager.Instance.SavePlayer();
             SceneController.Instance.GoToScene("RPSView");
@@ -204,15 +228,17 @@ public class RockPaperScissors : MonoBehaviour
     {
         RPSPlayer[] players = new RPSPlayer[2];
 
+        var currentGame = RPSMatchMaking.Instance.gameData;
+
         if (RPSMatchMaking.Instance.localPlayer.isPlayerA)
         {
-            players[0] = RPSMatchMaking.Instance.gameData.playerA;
-            players[1] = RPSMatchMaking.Instance.gameData.playerB;
+            players[0] = currentGame.playerA;
+            players[1] = currentGame.playerB;
         }
         else
         {
-            players[0] = RPSMatchMaking.Instance.gameData.playerB;
-            players[1] = RPSMatchMaking.Instance.gameData.playerA;
+            players[0] = currentGame.playerB;
+            players[1] = currentGame.playerA;
         }
 
         return players;

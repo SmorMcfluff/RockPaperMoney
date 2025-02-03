@@ -129,7 +129,6 @@ public class LoginManager : MonoBehaviour
             }
             else
             {
-
                 FirebaseUser newUser = task.Result.User;
                 SaveCredentials(email, password);
 

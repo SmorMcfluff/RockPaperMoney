@@ -434,8 +434,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2115471818}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &607561252
@@ -572,7 +571,6 @@ MonoBehaviour:
   scissorSprites:
   - {fileID: -9160870036341845331, guid: c35e354877c934747acacf8e19c92f59, type: 3}
   - {fileID: -7946868147826084568, guid: d8e035ab6fcc6f941ab7031baf478ef9, type: 3}
-  undecidedSprite: {fileID: -7877229825462887920, guid: c7a51d309eb00f14b87f9a5f446501d5, type: 3}
   playerLetter: 0
 --- !u!1 &767053040
 GameObject:
@@ -1093,7 +1091,6 @@ MonoBehaviour:
   - {fileID: -3641194643010583319, guid: fa52edc7eb59181418d6a38c07ad908e, type: 3}
   - {fileID: 3034834553938045805, guid: 9b226875b5b6db24b87c2fdb06687804, type: 3}
   - {fileID: 4647430394642806241, guid: 69a0f48ba5927054f93341a5fa345857, type: 3}
-  undecidedSprite: {fileID: -7877229825462887920, guid: c7a51d309eb00f14b87f9a5f446501d5, type: 3}
   playerLetter: 1
 --- !u!95 &1253013315
 Animator:
@@ -1298,7 +1295,7 @@ RectTransform:
   m_Children:
   - {fileID: 261283688}
   - {fileID: 767053041}
-  m_Father: {fileID: 607561251}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1600,3 +1597,4 @@ SceneRoots:
   - {fileID: 1253013313}
   - {fileID: 1965936684}
   - {fileID: 870108063}
+  - {fileID: 2115471818}

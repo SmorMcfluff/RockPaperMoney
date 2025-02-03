@@ -33,7 +33,7 @@ public class MainMenuManager : MonoBehaviour
         {
             try
             {
-                await RPSMatchMaking.Instance.RemoveGame();
+                await RPSMatchMaking.Instance.RemoveWaitingGame();
             }
             catch { }
 

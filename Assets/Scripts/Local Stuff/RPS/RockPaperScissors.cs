@@ -209,8 +209,6 @@ public class RockPaperScissors : MonoBehaviour
         gameData.playerB = isPlayerA ? onlinePlayer : localPlayer;
 
 
-        db.RootReference.Child("games").Child(gameData.gameID).RemoveValueAsync();
-
         if (!playerDisconnected)
         {
             SaveDataManager.Instance.SavePlayer();

@@ -18,11 +18,13 @@ public class SceneController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+
     public void GoToScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
         SetOrientation(sceneName);
     }
+
 
     private void SetOrientation(string sceneName)
     {

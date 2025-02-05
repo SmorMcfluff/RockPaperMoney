@@ -35,7 +35,6 @@ public class SaveDataManager : MonoBehaviour
 
     public void LoadPlayer()
     {
-        Debug.Log("Loading Player");
         var db = FirebaseDatabase.DefaultInstance;
         var auth = FirebaseAuth.DefaultInstance;
 
@@ -74,10 +73,9 @@ public class SaveDataManager : MonoBehaviour
                 return;
             }
 
-            if (localPlayerData.factoriesJsonStrings != null && localPlayerData.factoriesJsonStrings.Count > 0)
+            if (localPlayerData.factories != null && localPlayerData.factories.Count > 0)//localPlayerData.factoriesJsonStrings != null && localPlayerData.factoriesJsonStrings.Count > 0)
             {
-                Debug.Log("Loading " + localPlayerData.factoriesJsonStrings.Count + " factories");
-                for (int i = 0; i < localPlayerData.factoriesJsonStrings.Count; i++)
+                for (int i = 0; i < localPlayerData.factories.Count; i++)
                 {
                     try
                     {
@@ -138,7 +136,7 @@ public class SaveDataManager : MonoBehaviour
     private static void SaveFactory(int i)
     {
         var factoryData = IdleGameManager.Instance.factories[i].GetData();
-        Instance.localPlayerData.factoriesJsonStrings[i] = JsonUtility.ToJson(factoryData);
+        Instance.localPlayerData.factories[i] = factoryData;// JsonUtility.ToJson(factoryData);
     }
 
 

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 
@@ -41,11 +40,7 @@ public class Factory
     public Factory(FactoryData factoryData) //Loaded factory
     {
         SetTimeStamps();
-
-        var adWatcherRawJson = factoryData.adWatcherInfoString; 
-        var cleanedJson = Regex.Unescape(adWatcherRawJson).Trim('"');
-        adWatcherInfo = JsonUtility.FromJson<AdWatcherInfo>(cleanedJson);
-
+        adWatcherInfo = factoryData.adWatcherInfo;
 
         baseMoneyToVend = factoryData.moneyToVend;
         baseVendFrequency = factoryData.baseVendFrequency;
@@ -167,7 +162,7 @@ public class Factory
     {
         var factoryData = new FactoryData
         {
-            adWatcherInfoString = JsonUtility.ToJson(adWatcherInfo),
+            adWatcherInfo = adWatcherInfo,
             moneyToVend = baseMoneyToVend,
             baseVendFrequency = baseVendFrequency,
 

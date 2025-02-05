@@ -2,6 +2,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using Firebase.Database;
 
 public class RPSViewSceneManager : MonoBehaviour
 {
@@ -11,12 +12,12 @@ public class RPSViewSceneManager : MonoBehaviour
 
     private void Awake()
     {
-        returnButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("MainMenu"); });
+        returnButton.onClick.AddListener(delegate { LeaveGame(); });
         buttonTransform = returnButton.GetComponent<RectTransform>();
     }
     void Start()
     {
-        
+
         SetStatusText();
         Invoke(nameof(RevealStatusText), 1.95f);
         Invoke(nameof(RevealButton), 2.05f);
@@ -44,5 +45,14 @@ public class RPSViewSceneManager : MonoBehaviour
     private void RevealButton()
     {
         buttonTransform.DOAnchorPosY(50, 0.5f);
+    }
+
+    private void LeaveGame()
+    {
+        FirebaseDatabase db = FirebaseDatabase.DefaultInstance;
+        var gameData = RPSMatchMaking.Instance.gameData;
+
+        db.RootReference.Child("games").Child(gameData.gameID).RemoveValueAsync();
+        SceneController.Instance.GoToScene("MainMenu");
     }
 }

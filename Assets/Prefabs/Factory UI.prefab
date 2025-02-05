@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c573efce5445564bb9ba637639aeff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IDCardPrefab: {fileID: 8450748343568720524, guid: 81dfba8be1672974aacb9956a20c383f, type: 3}
   factoryStatsText: {fileID: 8266288516952798146}
   moneyUpgradePriceText: {fileID: 3566102578246098059}
   frequencyUpgradePriceText: {fileID: 8421499347278101509}
@@ -1061,7 +1062,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3891440584265694524}
         m_TargetAssemblyTypeName: FactoryUI, Assembly-CSharp
-        m_MethodName: PrintWorker
+        m_MethodName: ShowWorkerIDCard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

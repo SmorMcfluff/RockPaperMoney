@@ -18,7 +18,8 @@ public class PlayerData
 
     public string moneyBalance = "0.01";
 
-    public List<string> factoriesJsonStrings = new();
+    public List<FactoryData> factories = new();
+    //public List<string> factoriesJsonStrings = new();
 
     public void ChangeMoneyBalance(float amount)
     {

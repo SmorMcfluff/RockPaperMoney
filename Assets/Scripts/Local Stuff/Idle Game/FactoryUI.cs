@@ -88,9 +88,7 @@ public class FactoryUI : MonoBehaviour
     public void ShowWorkerIDCard()
     {
         var adInfo = IdleGameManager.Instance.factories[factoryIndex].adWatcherInfo;
-        GameObject newIDCard = Instantiate(IDCardPrefab, transform);
+        GameObject newIDCard = Instantiate(IDCardPrefab, transform.parent.parent.parent.parent);
         newIDCard.GetComponent<IDCard>().Construct(adInfo);
-
-        Debug.Log($"{adInfo.firstName} {adInfo.lastName}, {adInfo.age}. From {adInfo.country.ToString()}");
     }
 }

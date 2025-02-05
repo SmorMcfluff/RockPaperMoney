@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class AdWatcherInfo
 {
+    public CharacterAppearance appearance;
+
     public Country country;
     public Sex sex;
     public string firstName;
     public string lastName;
     public int age;
-    public CharacterAppearance appearance;
 
-    public AdWatcherInfo() //new Factory
+    public AdWatcherInfo()
     {
         var countryCount = System.Enum.GetNames(typeof(Country)).Length;
         country = (Country)Random.Range(0, countryCount);
@@ -18,6 +20,8 @@ public class AdWatcherInfo
         firstName = FirstNames.GetName(country, sex);
         lastName = LastNames.GetName(country, sex);
         age = Random.Range(14, 81);
+
+        appearance = new CharacterAppearance(this);
     }
 }
 

@@ -1,10 +1,13 @@
 using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 
 public class Factory
 {
+    [HideInInspector] public AdWatcherInfo adWatcherInfo;
+
     [HideInInspector] public float baseMoneyToVend = 0.01f;
 
     [HideInInspector] public float baseVendFrequency = 15f;//weiner was hr3
@@ -21,8 +24,10 @@ public class Factory
 
     [HideInInspector] public DateTime lastVendTime;
 
-    public Factory()
+    public Factory() //Bought factory
     {
+        adWatcherInfo = new AdWatcherInfo();
+
         moneyUpgrades = 0;
         frequencyUpgrades = 0;
 
@@ -32,9 +37,15 @@ public class Factory
         SetFrequencyUpgradePrice();
     }
 
-    public Factory(FactoryData factoryData)
+
+    public Factory(FactoryData factoryData) //Loaded factory
     {
         SetTimeStamps();
+
+        var adWatcherRawJson = factoryData.adWatcherInfoString; 
+        var cleanedJson = Regex.Unescape(adWatcherRawJson).Trim('"');
+        adWatcherInfo = JsonUtility.FromJson<AdWatcherInfo>(cleanedJson);
+
 
         baseMoneyToVend = factoryData.moneyToVend;
         baseVendFrequency = factoryData.baseVendFrequency;
@@ -154,14 +165,17 @@ public class Factory
 
     public FactoryData GetData()
     {
-        var factoryData = new FactoryData();
-        factoryData.moneyToVend = baseMoneyToVend;
-        factoryData.baseVendFrequency = baseVendFrequency;
+        var factoryData = new FactoryData
+        {
+            adWatcherInfoString = JsonUtility.ToJson(adWatcherInfo),
+            moneyToVend = baseMoneyToVend,
+            baseVendFrequency = baseVendFrequency,
 
-        factoryData.moneyUpgrades = moneyUpgrades;
-        factoryData.frequencyUpgrades = frequencyUpgrades;
+            moneyUpgrades = moneyUpgrades,
+            frequencyUpgrades = frequencyUpgrades,
 
-        factoryData.lastVendTimeString = lastVendTime.ToString();
+            lastVendTimeString = lastVendTime.ToString()
+        };
 
         return factoryData;
     }

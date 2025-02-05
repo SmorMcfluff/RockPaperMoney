@@ -9,6 +9,8 @@ public class FactoryUI : MonoBehaviour
     private float vendAmount;
     private float vendFrequency;
 
+    [SerializeField] private GameObject IDCardPrefab;
+
     [SerializeField] private TextMeshProUGUI factoryStatsText;
 
     [SerializeField] private TextMeshProUGUI moneyUpgradePriceText;
@@ -36,6 +38,7 @@ public class FactoryUI : MonoBehaviour
 
         UpdateText();
     }
+
 
     public void UpdateText()
     {
@@ -65,6 +68,7 @@ public class FactoryUI : MonoBehaviour
         }
     }
 
+
     private void UpgradeFactory(UpgradeType upgradeType)
     {
         Factory parentFactory = IdleGameManager.Instance.factories[factoryIndex];
@@ -79,5 +83,14 @@ public class FactoryUI : MonoBehaviour
         }
 
         UpdateText();
+    }
+
+    public void ShowWorkerIDCard()
+    {
+        var adInfo = IdleGameManager.Instance.factories[factoryIndex].adWatcherInfo;
+        GameObject newIDCard = Instantiate(IDCardPrefab, transform);
+        newIDCard.GetComponent<IDCard>().Construct(adInfo);
+
+        Debug.Log($"{adInfo.firstName} {adInfo.lastName}, {adInfo.age}. From {adInfo.country.ToString()}");
     }
 }

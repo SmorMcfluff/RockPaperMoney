@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,7 +19,6 @@ public class IdleGameManager : MonoBehaviour
         else
         {
             Instance = this;
-            //SaveDataManager.Instance.LoadPlayer();
         }
     }
 

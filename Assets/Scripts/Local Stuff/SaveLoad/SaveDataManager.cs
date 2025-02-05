@@ -2,6 +2,7 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -64,7 +65,7 @@ public class SaveDataManager : MonoBehaviour
             string rawJson = snap.GetRawJsonValue();
             try
             {
-                string cleanedJson = System.Text.RegularExpressions.Regex.Unescape(rawJson).Trim('"');
+                string cleanedJson = Regex.Unescape(rawJson).Trim('"');
                 localPlayerData = JsonUtility.FromJson<PlayerData>(cleanedJson);
             }
             catch (Exception ex)
@@ -78,7 +79,14 @@ public class SaveDataManager : MonoBehaviour
                 Debug.Log("Loading " + localPlayerData.factoriesJsonStrings.Count + " factories");
                 for (int i = 0; i < localPlayerData.factoriesJsonStrings.Count; i++)
                 {
-                    IdleGameManager.Instance.LoadFactory(i);
+                    try
+                    {
+                        IdleGameManager.Instance.LoadFactory(i);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Log(ex);
+                    }
                 }
             }
         });
@@ -129,7 +137,6 @@ public class SaveDataManager : MonoBehaviour
 
     private static void SaveFactory(int i)
     {
-        Debug.Log("saving factory index " + i);
         var factoryData = IdleGameManager.Instance.factories[i].GetData();
         Instance.localPlayerData.factoriesJsonStrings[i] = JsonUtility.ToJson(factoryData);
     }

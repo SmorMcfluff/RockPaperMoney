@@ -4,11 +4,12 @@ public class AdWatcherInfo
 {
     public Country country;
     public Sex sex;
-    string firstName;
-    string lastName;
-    int age;
+    public string firstName;
+    public string lastName;
+    public int age;
+    public CharacterAppearance appearance;
 
-    public AdWatcherInfo()
+    public AdWatcherInfo() //new Factory
     {
         var countryCount = System.Enum.GetNames(typeof(Country)).Length;
         country = (Country)Random.Range(0, countryCount);

@@ -7,8 +7,6 @@ public class FactoryStore : MonoBehaviour
     [HideInInspector] public float baseFactoryPrice = 0.01f;
     [HideInInspector] public float factoryPrice;
 
-    [HideInInspector] public bool canAfford;
-
     private void Awake()
     {
         if (Instance != null && Instance != this)

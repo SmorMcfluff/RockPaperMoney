@@ -34,9 +34,9 @@ public class RPSMatchMaking : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
         db = FirebaseDatabase.DefaultInstance;
     }
 
@@ -84,7 +84,11 @@ public class RPSMatchMaking : MonoBehaviour
             {
                 gameData = rpsGame;
 
-                localPlayer = new RPSPlayer();
+                localPlayer = new RPSPlayer()
+                {
+                    equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin
+                };
+
                 rpsGame.playerBJson = JsonUtility.ToJson(localPlayer);
                 rpsGame.playerBConnected = true;
                 db.RootReference.Child("waitingGames").Child(rpsGame.gameID).SetValueAsync(JsonUtility.ToJson(rpsGame)).ContinueWithOnMainThread(task =>
@@ -115,6 +119,7 @@ public class RPSMatchMaking : MonoBehaviour
 
         localPlayer = new RPSPlayer()
         {
+            equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin,
             isPlayerA = true
         };
 

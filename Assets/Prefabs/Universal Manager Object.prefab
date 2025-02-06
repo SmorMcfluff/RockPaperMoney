@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3667006212033303100}
   - component: {fileID: 3938718090949720168}
   - component: {fileID: 6771240266100505425}
+  - component: {fileID: 5709821500431662834}
   m_Layer: 0
   m_Name: Universal Manager Object
   m_TagString: Untagged
@@ -124,3 +125,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyPerMinute: 0
+--- !u!114 &5709821500431662834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4237240249823180918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb9ee8d071fba246a8eb3f6683913c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skins: []

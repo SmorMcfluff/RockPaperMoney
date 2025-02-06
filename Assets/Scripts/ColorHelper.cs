@@ -10,7 +10,7 @@ public class ColorHelper
         }
         else
         {
-            return Color.white;
+            return Color.magenta;
         }
     }
 

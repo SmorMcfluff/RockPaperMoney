@@ -1,9 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RPSViewHand : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer sr;
+    [SerializeField] SpriteRenderer upperArmSr;
+    [SerializeField] SpriteRenderer lowerArmSr;
+    [SerializeField] SpriteRenderer handSr;
 
     [SerializeField] Sprite[] paperSprites;
     [SerializeField] Sprite[] scissorSprites;
@@ -12,9 +15,34 @@ public class RPSViewHand : MonoBehaviour
 
     float animDuration = 0.25f;
 
-
-    public void SetAnimation()
+    private void Awake()
     {
+        SetSkin();
+    }
+
+    public void SetSkin()
+    {
+        SkinType equippedSkin = playerLetter == PlayerLetter.A
+            ? RPSMatchMaking.Instance.gameData.playerA.equippedSkin
+            : RPSMatchMaking.Instance.gameData.playerB.equippedSkin;
+
+        Skin skin = SkinManager.Instance.GetSkin(equippedSkin);
+
+        ArmSprites armSprites = (playerLetter == PlayerLetter.A) ? skin.playerAArmSprites : skin.playerBArmSprites;
+        HandSprites handSprites = (playerLetter == PlayerLetter.A) ? skin.playerAHandSprites : skin.playerBHandSprites;
+
+        upperArmSr.sprite = armSprites.upperArm;
+        lowerArmSr.sprite = armSprites.lowerArm;
+
+        handSr.sprite = handSprites.defaultHandSprite;
+        paperSprites = handSprites.paperSprites;
+        scissorSprites = handSprites.scissorSprites;
+    }
+
+
+    public void SetAnimation() // Gets called from an animation event
+    {
+        Debug.Log("Anim set");
         HandSign handSign = (playerLetter == PlayerLetter.A)
             ? RPSMatchMaking.Instance.gameData.playerA.handSign
             : RPSMatchMaking.Instance.gameData.playerB.handSign;
@@ -36,7 +64,7 @@ public class RPSViewHand : MonoBehaviour
                 StartCoroutine(PlayScissors());
                 break;
             default:
-                sr.enabled = false;
+                handSr.enabled = false;
                 break;
         }
     }
@@ -49,7 +77,7 @@ public class RPSViewHand : MonoBehaviour
 
         for (int i = 0; i < frameAmount; i++)
         {
-            sr.sprite = paperSprites[i];
+            handSr.sprite = paperSprites[i];
             yield return new WaitForSecondsRealtime(frameDuration);
         }
     }
@@ -62,7 +90,7 @@ public class RPSViewHand : MonoBehaviour
 
         for (int i = 0; i < frameAmount; i++)
         {
-            sr.sprite = scissorSprites[i];
+            handSr.sprite = scissorSprites[i];
             yield return new WaitForSecondsRealtime(frameDuration);
         }
     }

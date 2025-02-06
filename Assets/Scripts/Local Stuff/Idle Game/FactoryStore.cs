@@ -56,6 +56,7 @@ public class FactoryStore : MonoBehaviour
         IdleGameUIManager.Instance.UpdatePriceText(CheckIfAffordable());
     }
 
+
     public bool CheckIfAffordable()
     {
         return SaveDataManager.Instance.localPlayerData.GetMoneyBalance() >= Instance.factoryPrice;

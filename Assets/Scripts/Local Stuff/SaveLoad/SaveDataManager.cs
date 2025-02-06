@@ -20,21 +20,17 @@ public class SaveDataManager : MonoBehaviour
         else
         {
             Instance = this;
+            localPlayerData = new PlayerData();
+            DontDestroyOnLoad(gameObject);
         }
-
-        localPlayerData = new PlayerData();
-        DontDestroyOnLoad(gameObject);
     }
 
 
-    public static object GetCurrentTimeStampForFirebaseServer()
-    {
-        return ServerValue.Timestamp;
-    }
-
-
+    bool playerIsLoaded = false;
     public void LoadPlayer()
     {
+        playerIsLoaded = false;
+
         var db = FirebaseDatabase.DefaultInstance;
         var auth = FirebaseAuth.DefaultInstance;
 
@@ -62,6 +58,7 @@ public class SaveDataManager : MonoBehaviour
             }
 
             string rawJson = snap.GetRawJsonValue();
+            Debug.Log(rawJson);
             try
             {
                 string cleanedJson = Regex.Unescape(rawJson).Trim('"');
@@ -73,7 +70,9 @@ public class SaveDataManager : MonoBehaviour
                 return;
             }
 
-            if (localPlayerData.factories != null && localPlayerData.factories.Count > 0)//localPlayerData.factoriesJsonStrings != null && localPlayerData.factoriesJsonStrings.Count > 0)
+            playerIsLoaded = true;
+
+            if (localPlayerData.factories != null && localPlayerData.factories.Count > 0)
             {
                 for (int i = 0; i < localPlayerData.factories.Count; i++)
                 {
@@ -98,6 +97,11 @@ public class SaveDataManager : MonoBehaviour
 
     public void SavePlayer()
     {
+        if (!playerIsLoaded)
+        {
+            return;
+        }
+
         if (FirebaseAuth.DefaultInstance.CurrentUser != null)
         {
             var db = FirebaseDatabase.DefaultInstance;
@@ -105,6 +109,7 @@ public class SaveDataManager : MonoBehaviour
 
             if (localPlayerData == null)
             {
+                Debug.Log("Data is null");
                 localPlayerData = new PlayerData();
             }
 

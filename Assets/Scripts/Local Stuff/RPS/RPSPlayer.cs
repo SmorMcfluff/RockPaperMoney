@@ -4,6 +4,8 @@ public class RPSPlayer
 
     public HandSign handSign = HandSign.Undecided;
 
+    public SkinType equippedSkin;
+
     public bool isPlayerA;
     public bool isReady;
 

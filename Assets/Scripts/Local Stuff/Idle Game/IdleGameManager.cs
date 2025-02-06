@@ -8,7 +8,7 @@ public class IdleGameManager : MonoBehaviour
 
     public List<Factory> factories = new List<Factory>();
 
-    [DoNotSerialize] public float moneyPerMinute;
+    [HideInInspector] public float moneyPerMinute;
 
     private void Awake()
     {
@@ -48,15 +48,13 @@ public class IdleGameManager : MonoBehaviour
         var newFactory = new Factory();
         newFactory.SetTimeStamps();
 
-        //var newFactoryJsonString = JsonUtility.ToJson(newFactory);
-
         factories.Add(newFactory);
 
         GetMoneyPerMinute();
         FactoryStore.Instance.SetFactoryPrice();
         IdleGameUIManager.Instance.UpdateAllText();
 
-        SaveDataManager.Instance.localPlayerData.factories.Add(newFactory.GetData());//factoriesJsonStrings.Add(newFactoryJsonString);
+        SaveDataManager.Instance.localPlayerData.factories.Add(newFactory.GetData());
         SaveDataManager.Instance.SavePlayer();
 
     }
@@ -64,8 +62,7 @@ public class IdleGameManager : MonoBehaviour
 
     public void LoadFactory(int i)
     {
-        //var newFactoryJsonString = SaveDataManager.Instance.localPlayerData.factoriesJsonStrings[i];
-        FactoryData newFactoryData = SaveDataManager.Instance.localPlayerData.factories[i]; //newFactory;//JsonUtility.FromJson<FactoryData>(newFactoryJsonString);
+        FactoryData newFactoryData = SaveDataManager.Instance.localPlayerData.factories[i];
 
         var newFactory = new Factory(newFactoryData);
         factories.Add(newFactory);

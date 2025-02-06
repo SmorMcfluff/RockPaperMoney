@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -8,18 +9,14 @@ public class PlayerData
     public int winCount;
     public int lossCount;
 
-    public bool[] unlockedHandSigns = new bool[3]
-    {
-        true, false, false
-    };
-    //public bool rockUnlocked = true;
-    //public bool paperUnlocked = true;
-    //public bool scissorsUnlocked = true;
+    public bool[] unlockedHandSigns = new bool[3];
+
+    public List<SkinType> ownedSkins = new();
+    public SkinType equippedSkin = SkinType.Undefined;
 
     public string moneyBalance = "0.01";
 
     public List<FactoryData> factories = new();
-    //public List<string> factoriesJsonStrings = new();
 
     public void ChangeMoneyBalance(float amount)
     {
@@ -28,8 +25,20 @@ public class PlayerData
         moneyBalance = moneyAmount.ToString("F2", CultureInfo.InvariantCulture);
     }
 
+
     public float GetMoneyBalance()
     {
         return float.Parse(moneyBalance, CultureInfo.InvariantCulture);
+    }
+
+
+    public void SetInitialUnlockedHandsigns()
+    {
+        unlockedHandSigns[Random.Range(0, 3)] = true;
+    }
+
+    public PlayerData()
+    {
+        SetInitialUnlockedHandsigns();
     }
 }

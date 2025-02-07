@@ -27,6 +27,13 @@ public class Skin : PurchasableObject
 
     public HandSprites playerAHandSprites;
     public HandSprites playerBHandSprites;
+
+
+    public override void GetBought()
+    {
+        base.GetBought();
+        SaveDataManager.Instance.localPlayerData.ownedSkins.Add(skin);
+    }
 }
 
 public enum SkinType

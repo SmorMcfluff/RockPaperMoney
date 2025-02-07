@@ -15,4 +15,4 @@ MonoBehaviour:
   itemName: Paper
   price: 9.99
   icon: {fileID: 0}
-  handSignIndex: 2
+  unlockedHandSignIndex: 1

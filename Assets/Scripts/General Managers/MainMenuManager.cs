@@ -22,7 +22,7 @@ public class MainMenuManager : MonoBehaviour
     {
         RPSButton.onClick.AddListener(delegate { RPSMatchMaking.Instance.ConnectToGame(); });
         idleGameButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("IdleGameScene"); });
-        storeButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene(""); });
+        storeButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Store"); });
         profileButton.onClick.AddListener(delegate { LoginManager.Instance.SignOut(); });
     }
 

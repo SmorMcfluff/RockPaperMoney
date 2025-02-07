@@ -7,6 +7,11 @@ public class BackButton : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<Button>().onClick.AddListener(delegate { SceneController.Instance.GoToScene(targetScene); });
+        GetComponent<Button>().onClick.AddListener(GoToTargetScene);
+    }
+
+    private void GoToTargetScene()
+    {
+        SceneController.Instance.GoToScene(targetScene);
     }
 }

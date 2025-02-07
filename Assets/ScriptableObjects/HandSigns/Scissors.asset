@@ -15,4 +15,4 @@ MonoBehaviour:
   itemName: Scissors
   price: 9.99
   icon: {fileID: 0}
-  handSignIndex: 3
+  unlockedHandSignIndex: 2

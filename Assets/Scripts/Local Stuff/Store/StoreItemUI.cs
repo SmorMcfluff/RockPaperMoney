@@ -8,18 +8,39 @@ public class StoreItemUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private Button buyButton;
 
     [SerializeField] Image icon;
 
-
-    private void Awake()
+    public void SetUpItem()
     {
-        
+        priceText.text = $"${purchasableObject.price}";
+        nameText.text = purchasableObject.name;
+
+        if (purchasableObject is HandSignPurchasable)
+        {
+            var handSignItem = (HandSignPurchasable)purchasableObject;
+            handSignItem.GetIcon();
+        }
+
+        icon.sprite = purchasableObject.icon;
+        SetColor();
     }
+
+
+    public void SetColor()
+    {
+        PlayerData player = SaveDataManager.Instance.localPlayerData;
+        if (!purchasableObject.IsAffordable(player))
+        {
+            buyButton.image.color = Color.gray;
+        }
+    }
+
 
     public void BuyItem()
     {
-        SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-purchasableObject.price);
+        purchasableObject.GetBought();
         StoreManager.Instance.GenerateStoreItems();
     }
 }

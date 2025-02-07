@@ -137,4 +137,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb9ee8d071fba246a8eb3f6683913c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skins: []
+  skins:
+  - {fileID: 11400000, guid: 85ad74256981dfd46af9aa6017e561f7, type: 2}

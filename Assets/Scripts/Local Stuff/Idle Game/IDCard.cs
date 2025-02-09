@@ -11,14 +11,10 @@ public class IDCard : MonoBehaviour
 
     [SerializeField] private IDComponent flags;
 
-    private IDCardPortrait portrait;
+    public IDCardPortrait portrait;
 
-    public void Awake()
-    {
-        portrait = GetComponent<IDCardPortrait>();
-    }
-
-    public void Construct(AdWatcherInfo data)
+    
+    public void LoadData(AdWatcherInfo data)
     {
         portrait.GeneratePortrait(data.appearance);
 
@@ -38,8 +34,9 @@ public class IDCard : MonoBehaviour
 
     private string SetSexText(Sex sex) => sex == Sex.Male ? "M" : "F";
 
-    public void Close()
+
+    public void ToggleEnabled()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(!gameObject.activeSelf);
     }
 }

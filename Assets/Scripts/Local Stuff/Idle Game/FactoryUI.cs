@@ -11,6 +11,8 @@ public class FactoryUI : MonoBehaviour
 
     [SerializeField] private GameObject IDCardPrefab;
 
+    [SerializeField] private TextMeshProUGUI factoryNameText;
+
     [SerializeField] private TextMeshProUGUI factoryStatsText;
 
     [SerializeField] private TextMeshProUGUI moneyUpgradePriceText;
@@ -20,9 +22,6 @@ public class FactoryUI : MonoBehaviour
     [SerializeField] private Button frequencyUpgradeButton;
 
     private enum UpgradeType {money, frequency}
-
-    private UpgradeType upgradeType;
-
 
     public void Construct(int i)
     {
@@ -47,6 +46,7 @@ public class FactoryUI : MonoBehaviour
         vendAmount = parentFactory.GetUpgradedMoneyToVend();
         vendFrequency = parentFactory.GetUpgradedVendFrequency();
 
+        factoryNameText.text = $"{parentFactory.adWatcherInfo.firstName} {parentFactory.adWatcherInfo.lastName}";
         factoryStatsText.text = $"${vendAmount:F2}/{vendFrequency}s";
 
         if(parentFactory.moneyUpgrades < 10)
@@ -88,7 +88,8 @@ public class FactoryUI : MonoBehaviour
     public void ShowWorkerIDCard()
     {
         var adInfo = IdleGameManager.Instance.factories[factoryIndex].adWatcherInfo;
-        GameObject newIDCard = Instantiate(IDCardPrefab, transform.parent.parent.parent.parent);
-        newIDCard.GetComponent<IDCard>().Construct(adInfo);
+        IDCardContainer.Instance.IDCard.LoadData(adInfo);
+
+        IDCardContainer.Instance.IDCard.gameObject.SetActive(true);
     }
 }

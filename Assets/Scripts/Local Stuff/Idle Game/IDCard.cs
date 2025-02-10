@@ -12,11 +12,11 @@ public class IDCard : MonoBehaviour
     [SerializeField] private IDComponent flags;
 
     public IDCardPortrait portrait;
-
     
+
     public void LoadData(AdWatcherInfo data)
     {
-        portrait.GeneratePortrait(data.appearance);
+        portrait.GeneratePortrait(data);
 
         SetFlag(data.country);
 
@@ -38,5 +38,7 @@ public class IDCard : MonoBehaviour
     public void ToggleEnabled()
     {
         gameObject.SetActive(!gameObject.activeSelf);
+
+
     }
 }

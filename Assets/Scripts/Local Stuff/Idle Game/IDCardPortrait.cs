@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.UI;
 
 public class IDCardPortrait : MonoBehaviour
@@ -11,11 +13,17 @@ public class IDCardPortrait : MonoBehaviour
     [SerializeField] private Image nose;
     [SerializeField] private Image mouth;
 
+    [SerializeField] private Image[] wrinkles;
+
     [SerializeField] private List<IDComponent> idComponents;
 
 
-    public void GeneratePortrait(CharacterAppearance appearance)
+    public void GeneratePortrait(AdWatcherInfo data)
     {
+        var appearance = data.appearance;
+
+        ResetWrinkles();
+
         foreach (var component in idComponents)
         {
             switch (component.name)
@@ -26,10 +34,7 @@ public class IDCardPortrait : MonoBehaviour
                     break;
 
                 case "Hair":
-                    if (appearance.hairIndex == 0 || appearance.hairIndex == 1)
-                    {
-                        hair.transform.SetSiblingIndex(hair.transform.GetSiblingIndex() - 1);
-                    }
+                    SetHairOrder(appearance);
                     hair.sprite = component.variations[appearance.hairIndex];
                     hair.color = ColorHelper.HexToRGB(appearance.hairColorHex);
                     break;
@@ -51,6 +56,45 @@ public class IDCardPortrait : MonoBehaviour
                 case "Mouth":
                     mouth.sprite = component.variations[appearance.mouthIndex];
                     break;
+            }
+        }
+        if(data.age >= 60)
+        {
+            SetWrinkles(data.age);
+        }
+    }
+
+
+    private void ResetWrinkles()
+    {
+        foreach (Image img in wrinkles)
+        {
+            img.gameObject.SetActive(false);
+        }
+    }
+
+
+    private void SetHairOrder(CharacterAppearance appearance)
+    {
+        int targetIndex = (appearance.hairIndex == 0 || appearance.hairIndex == 1)
+            ? 1
+            : 2;
+
+        hair.transform.SetSiblingIndex(targetIndex);
+    }
+
+
+    private void SetWrinkles(int age)
+    {
+        int agePastSixty = age - 60;
+        int index = 0;
+
+        for(int i = 0; i <= agePastSixty; i++)
+        {
+            if (i % 5 == 0)
+            {
+                wrinkles[index].gameObject.SetActive(true);
+                index++;
             }
         }
     }

@@ -20,7 +20,7 @@ public class CharacterAppearance
     public CharacterAppearance(AdWatcherInfo data)
     {
         SetStyles(data.sex);
-        SetColors();
+        SetColors(data.age);
     }
 
 
@@ -48,16 +48,16 @@ public class CharacterAppearance
     }
 
 
-    private void SetColors()
+    private void SetColors(int age)
     {
         bodyColorHex = GetRandomColorHex();
         hairColorHex = GetRandomColorHex();
-        skinColorHex = SetSkinColorHex();
+        skinColorHex = SetSkinColorHex(age);
         eyeColorHex = SetEyeColorHex();
     }
 
 
-    private string SetSkinColorHex()
+    private string SetSkinColorHex(int age)
     {
         Color[] colors = new Color[]
         {
@@ -70,7 +70,20 @@ public class CharacterAppearance
 
         var color = colors[Random.Range(0, colors.Length)];
 
+        if(age >= 60)
+        {
+            MakePaler(ref color, age);
+        }
+
         return ColorHelper.RGBToHex(color);
+    }
+
+    private void MakePaler(ref Color color, int age)
+    {
+        float ageOverSixty = age - 59;
+        float maxAgeOverSixty = 20f;
+        float lerpFactor = Mathf.Clamp01(ageOverSixty / maxAgeOverSixty) * 0.5f;
+        color = Color.Lerp(color, Color.white, lerpFactor);
     }
 
     private string SetEyeColorHex()

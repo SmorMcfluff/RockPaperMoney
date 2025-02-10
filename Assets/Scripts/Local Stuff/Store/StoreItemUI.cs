@@ -17,9 +17,8 @@ public class StoreItemUI : MonoBehaviour
         priceText.text = $"${purchasableObject.price}";
         nameText.text = purchasableObject.name;
 
-        if (purchasableObject is HandSignPurchasable)
+        if (purchasableObject is HandSignPurchasable handSignItem)
         {
-            var handSignItem = (HandSignPurchasable)purchasableObject;
             handSignItem.GetIcon();
         }
 

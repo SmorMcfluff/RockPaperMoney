@@ -53,11 +53,17 @@ public class RockPaperScissors : MonoBehaviour
         readyButton.onClick.AddListener(delegate { DeclareReady(); });
     }
 
+
     private void SetHandSignButtons()
     {
+        SkinType equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin;
+        Sprite[] icons = SkinManager.Instance.GetIcons(equippedSkin);
+
         var unlockedHandSigns = SaveDataManager.Instance.localPlayerData.unlockedHandSigns;
         for (int i = 0; i < handsignButtons.Length; i++)
         {
+            handsignButtons[i].image.sprite = icons[i];
+
             if (!unlockedHandSigns[i])
             {
                 handsignButtons[i].interactable = false;

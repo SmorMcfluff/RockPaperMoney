@@ -11,13 +11,14 @@ public class HandSignPurchasable : PurchasableObject
     public void GetIcon()
     {
         SkinType equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin;
-        Skin skin = SkinManager.Instance.GetSkin(equippedSkin);
+
+        Sprite[] icons = SkinManager.Instance.GetIcons(equippedSkin);
 
         icon = unlockedHandSignIndex switch
         {
-            0 => skin.playerAHandSprites.defaultHandSprite,
-            1 => skin.playerAHandSprites.paperSprites[2],
-            2 => skin.playerAHandSprites.scissorSprites[1],
+            0 => icons[0],
+            1 => icons[1],
+            2 => icons[2],
             _ => null
         };
     }

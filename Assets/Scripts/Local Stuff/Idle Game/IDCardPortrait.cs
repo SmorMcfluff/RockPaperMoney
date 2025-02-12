@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
-using UnityEngine.Android;
 using UnityEngine.UI;
 
 public class IDCardPortrait : MonoBehaviour
@@ -58,7 +56,7 @@ public class IDCardPortrait : MonoBehaviour
                     break;
             }
         }
-        if(data.age >= 60)
+        if (data.age >= 60)
         {
             SetWrinkles(data.age);
         }
@@ -89,7 +87,7 @@ public class IDCardPortrait : MonoBehaviour
         int agePastSixty = age - 60;
         int index = 0;
 
-        for(int i = 0; i <= agePastSixty; i++)
+        for (int i = 0; i <= agePastSixty; i++)
         {
             if (i % 5 == 0)
             {

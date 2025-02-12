@@ -12,7 +12,7 @@ public class IDCard : MonoBehaviour
     [SerializeField] private IDComponent flags;
 
     public IDCardPortrait portrait;
-    
+
 
     public void LoadData(AdWatcherInfo data)
     {

@@ -7,19 +7,24 @@ public abstract class PurchasableObject : ScriptableObject
 
     public Sprite icon;
 
-    public virtual void GetBought()
+    public abstract void GetIcon();
+
+
+    public virtual bool GetBought()
     {
         PlayerData player = SaveDataManager.Instance.localPlayerData;
 
         if (!IsAffordable(player))
         {
-            return;
+            return false;
         }
         else
         {
             player.ChangeMoneyBalance(-price);
+            return true;
         }
     }
+
 
     public bool IsAffordable(PlayerData player)
     {

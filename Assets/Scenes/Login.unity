@@ -1921,14 +1921,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Universal Manager Object
       objectReference: {fileID: 0}
-    - target: {fileID: 5709821500431662834, guid: b0cae22626246d84aaf943f0fd39bdcc, type: 3}
-      propertyPath: skins.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5709821500431662834, guid: b0cae22626246d84aaf943f0fd39bdcc, type: 3}
-      propertyPath: 'skins.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 85ad74256981dfd46af9aa6017e561f7, type: 2}
     - target: {fileID: 8717503164977248255, guid: b0cae22626246d84aaf943f0fd39bdcc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 84.227295

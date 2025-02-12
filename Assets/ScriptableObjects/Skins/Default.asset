@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e754c5926ee29d943961f48826d7432d, type: 3}
-  m_Name: Undefined
+  m_Name: Default
   m_EditorClassIdentifier: 
-  itemName: Undefined Skin
-  thumbnail: {fileID: 0}
+  itemName: Default Skin
+  price: 0
+  icon: {fileID: 0}
   skin: 0
   playerAArmSprites:
     upperArm: {fileID: -9084505196418534393, guid: 4b81abe3bdc376c40bcfbea69ee2cc07, type: 3}

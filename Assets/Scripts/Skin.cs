@@ -29,15 +29,31 @@ public class Skin : PurchasableObject
     public HandSprites playerBHandSprites;
 
 
-    public override void GetBought()
+    public override void GetIcon()
     {
-        base.GetBought();
+        var icons = SkinManager.Instance.GetIcons(skin);
+        icon = icons[0];
+    }
+
+
+    public override bool GetBought()
+    {
+        if(!base.GetBought())
+        {
+            return false;
+        }
+
         SaveDataManager.Instance.localPlayerData.ownedSkins.Add(skin);
+        return true;
     }
 }
 
 public enum SkinType
 {
-    Undefined,
-    Default
+    Default,
+    Pale,
+    Light,
+    Neutral,
+    Tan,
+    Dark
 }

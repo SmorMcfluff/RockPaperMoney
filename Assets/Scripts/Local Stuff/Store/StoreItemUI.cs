@@ -10,30 +10,39 @@ public class StoreItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private Button buyButton;
 
-    [SerializeField] Image icon;
+    [SerializeField] Image iconImg;
 
     public void SetUpItem()
     {
         priceText.text = $"${purchasableObject.price}";
         nameText.text = purchasableObject.name;
 
-        if (purchasableObject is HandSignPurchasable handSignItem)
-        {
-            handSignItem.GetIcon();
-        }
+        purchasableObject.GetIcon();
+        iconImg.sprite = purchasableObject.icon;
 
-        icon.sprite = purchasableObject.icon;
         SetColor();
+
+        if(purchasableObject is Skin)
+        {
+            SetUpPreviewButton();
+        }
     }
 
 
-    public void SetColor()
+    private void SetColor()
     {
         PlayerData player = SaveDataManager.Instance.localPlayerData;
         if (!purchasableObject.IsAffordable(player))
         {
             buyButton.image.color = Color.gray;
         }
+    }
+
+
+    private void SetUpPreviewButton()
+    {
+        SkinType skin = (purchasableObject as Skin).skin;
+        GetComponent<PreviewButton>().AddListener(skin);
     }
 
 

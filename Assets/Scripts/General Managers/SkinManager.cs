@@ -5,7 +5,7 @@ public class SkinManager : MonoBehaviour
 {
     public static SkinManager Instance;
 
-    [SerializeField] private List<Skin> skins;
+    [SerializeField] public List<Skin> skins;
 
 
     private void Awake()
@@ -26,6 +26,7 @@ public class SkinManager : MonoBehaviour
     {
         return skins[(int)skin];
     }
+
 
     public Sprite[] GetIcons(SkinType skinType)
     {

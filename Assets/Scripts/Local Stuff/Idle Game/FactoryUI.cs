@@ -21,7 +21,7 @@ public class FactoryUI : MonoBehaviour
     [SerializeField] private Button moneyUpgradeButton;
     [SerializeField] private Button frequencyUpgradeButton;
 
-    private enum UpgradeType {money, frequency}
+    private enum UpgradeType { money, frequency }
 
     public void Construct(int i)
     {
@@ -49,7 +49,7 @@ public class FactoryUI : MonoBehaviour
         factoryNameText.text = $"{parentFactory.adWatcherInfo.firstName} {parentFactory.adWatcherInfo.lastName}";
         factoryStatsText.text = $"${vendAmount:F2}/{vendFrequency}s";
 
-        if(parentFactory.moneyUpgrades < 10)
+        if (parentFactory.moneyUpgrades < 10)
         {
             moneyUpgradePriceText.text = $"${parentFactory.moneyUpgradePrice:F2}";
         }
@@ -58,7 +58,7 @@ public class FactoryUI : MonoBehaviour
             moneyUpgradePriceText.text = "--";
         }
 
-        if(parentFactory.frequencyUpgrades < 14)
+        if (parentFactory.frequencyUpgrades < 14)
         {
             frequencyUpgradePriceText.text = $"${parentFactory.frequencyUpgradePrice:F2}";
         }
@@ -77,7 +77,7 @@ public class FactoryUI : MonoBehaviour
         {
             parentFactory.UpgradeFrequency();
         }
-        else if(upgradeType == UpgradeType.money)
+        else if (upgradeType == UpgradeType.money)
         {
             parentFactory.UpgradeMoneyVendAmount();
         }

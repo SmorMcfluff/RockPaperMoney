@@ -70,7 +70,7 @@ public class CharacterAppearance
 
         var color = colors[Random.Range(0, colors.Length)];
 
-        if(age >= 60)
+        if (age >= 60)
         {
             MakePaler(ref color, age);
         }

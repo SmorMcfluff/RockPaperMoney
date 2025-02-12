@@ -13,15 +13,15 @@ public class StoreManager : MonoBehaviour
     public Button handSignButton;
     public Button skinButton;
 
+    public GameObject storePanel;
+
     [SerializeField] private GameObject[] storeCategories;
 
     [SerializeField] private Transform handSignsCategory;
     [SerializeField] private Transform skinsCategory;
 
-    [SerializeField] private GameObject storeItemUIPrefab;
-    private List<GameObject> storeItemUIs = new();
-
-    [SerializeField] private List<PurchasableObject> purchasableObjects;
+    [SerializeField] private List<StoreItemUI> handSignItems;
+    [SerializeField] private List<StoreItemUI> skinItems;
 
 
     private void Awake()
@@ -38,57 +38,57 @@ public class StoreManager : MonoBehaviour
 
     private void Start()
     {
+        GenerateStoreItems();
+
         SetCategoryButtonColor(currentCategory);
         SetCategoryButtonInteractable(currentCategory);
 
-        GenerateStoreItems();
+        ChangeCategory(1);
     }
 
 
     public void GenerateStoreItems()
     {
         ClearStoreItems();
+        PlayerData player = SaveDataManager.Instance.localPlayerData;
 
-        foreach (PurchasableObject po in purchasableObjects)
+        foreach (var item in handSignItems)
         {
-            bool isSkin = (po is Skin);
+            HandSignPurchasable handSignPurchase = (item.purchasableObject as HandSignPurchasable);
 
-            if (isSkin)
+            int i = handSignPurchase.unlockedHandSignIndex;
+
+            if (!player.unlockedHandSigns[i])
             {
-
+                item.gameObject.SetActive(true);
+                item.SetUpItem();
             }
-            else
+        }
+
+        foreach (var item in skinItems)
+        {
+            SkinType skinType = (item.purchasableObject as Skin).skin;
+
+            if (!player.ownedSkins.Contains(skinType))
             {
-                int i = ((HandSignPurchasable)po).unlockedHandSignIndex;
-                PlayerData player = SaveDataManager.Instance.localPlayerData;
-
-                if (player.unlockedHandSigns[i])
-                {
-                    continue;
-                }
+                item.gameObject.SetActive(true);
+                item.SetUpItem();
             }
-
-            GameObject newObj = Instantiate(storeItemUIPrefab, isSkin ? skinsCategory : handSignsCategory);
-            storeItemUIs.Add(newObj);
-            Debug.Log("new object created and added at index #" + (storeItemUIs.Count-1));
-
-            var itemUI = newObj.GetComponent<StoreItemUI>();
-            itemUI.purchasableObject = po;
-            itemUI.SetUpItem();
         }
     }
 
 
     private void ClearStoreItems()
     {
-        foreach (GameObject item in storeItemUIs)
+        foreach (var item in handSignItems)
         {
-            Debug.Log("Clearing index #" + storeItemUIs.IndexOf(item));
-            Destroy(item);
-            Debug.Log("DESTROYED");
+            item.gameObject.SetActive(false);
         }
-        storeItemUIs.Clear();
-        Debug.Log("List cleared");
+
+        foreach (var item in skinItems)
+        {
+            item.gameObject.SetActive(false);
+        }
     }
 
 

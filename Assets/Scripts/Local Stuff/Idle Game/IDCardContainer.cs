@@ -37,7 +37,7 @@ public class IDCardContainer : MonoBehaviour
         var scaleFactor = canvasWidth / cardWidth;
 
         var scaledHeight = cardHeight * scaleFactor;
-        
+
         if (scaledHeight > canvasHeight)
         {
             scaleFactor = canvasHeight / cardHeight;

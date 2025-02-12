@@ -74,7 +74,7 @@ public class IdleGameUIManager : MonoBehaviour
         efficiencyText.text = $"${IdleGameManager.Instance.moneyPerMinute:F2}/min";
     }
 
-    
+
     public void GenerateFactoryUIList()
     {
         GenerateFactoryUIs();

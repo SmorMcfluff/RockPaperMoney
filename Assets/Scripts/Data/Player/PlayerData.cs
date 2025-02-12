@@ -11,8 +11,12 @@ public class PlayerData
 
     public bool[] unlockedHandSigns = new bool[3];
 
-    public List<SkinType> ownedSkins = new();
-    public SkinType equippedSkin = SkinType.Undefined;
+    public List<SkinType> ownedSkins = new()
+    {
+        SkinType.Default
+    };
+
+    public SkinType equippedSkin = SkinType.Default;
 
     public string moneyBalance = "0.01";
 

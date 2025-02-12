@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e754c5926ee29d943961f48826d7432d, type: 3}
+  m_Name: Light
+  m_EditorClassIdentifier: 
+  itemName: Light
+  price: 10000
+  icon: {fileID: -9005164296155538828, guid: 2567e24d245a2a64f887ea8d98b1cb3a, type: 3}
+  skin: 2
+  playerAArmSprites:
+    upperArm: {fileID: 21300000, guid: 973cb0134fd5f504fb4bf3f004065b22, type: 3}
+    lowerArm: {fileID: 21300000, guid: 74bfe067542530c4699222c800604e9b, type: 3}
+  playerBArmSprites:
+    upperArm: {fileID: 21300000, guid: adcab6027e8d9dd4faff63f9dc22142a, type: 3}
+    lowerArm: {fileID: 21300000, guid: e211432cb803b974a80975f37c5c2d26, type: 3}
+  playerAHandSprites:
+    defaultHandSprite: {fileID: 21300000, guid: 2567e24d245a2a64f887ea8d98b1cb3a, type: 3}
+    paperSprites:
+    - {fileID: 21300000, guid: 006ec6353e6a40c4c9eb6604dd7c293d, type: 3}
+    - {fileID: 21300000, guid: 45e7b8d48383c7241b66c481c1f6ec30, type: 3}
+    - {fileID: 21300000, guid: 9ddd8db5042bb5840aa1c3d1722e8030, type: 3}
+    scissorSprites:
+    - {fileID: 21300000, guid: 6be652fbdf153424aaf618d57b47e4b2, type: 3}
+    - {fileID: 21300000, guid: a60010bf761ecf94581b42b7db6b5247, type: 3}
+  playerBHandSprites:
+    defaultHandSprite: {fileID: 21300000, guid: 6c27aa54b9f1ac7478bb613b49820316, type: 3}
+    paperSprites:
+    - {fileID: 21300000, guid: 9e1f6b5287111114f8ce9481ca3e0f02, type: 3}
+    - {fileID: 21300000, guid: 890d03fa1311a4c4798568371ec21e85, type: 3}
+    - {fileID: 21300000, guid: 213239186c07e9848bca7558289f6e8c, type: 3}
+    scissorSprites:
+    - {fileID: 21300000, guid: 286532fac325b6044a3b85d4b63dd78c, type: 3}
+    - {fileID: 21300000, guid: 44285f460a8544a41b1fd9d3af4aaeb7, type: 3}
+    - {fileID: 21300000, guid: 213239186c07e9848bca7558289f6e8c, type: 3}

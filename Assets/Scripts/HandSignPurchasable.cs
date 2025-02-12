@@ -8,10 +8,9 @@ public class HandSignPurchasable : PurchasableObject
     // 1 = paper
     // 2 = scissors
 
-    public void GetIcon()
+    public override void GetIcon()
     {
         SkinType equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin;
-
         Sprite[] icons = SkinManager.Instance.GetIcons(equippedSkin);
 
         icon = unlockedHandSignIndex switch
@@ -23,10 +22,14 @@ public class HandSignPurchasable : PurchasableObject
         };
     }
 
-    public override void GetBought()
+    public override bool GetBought()
     {
-        base.GetBought();
+        if(!base.GetBought())
+        {
+            return false;
+        }
 
         SaveDataManager.Instance.localPlayerData.unlockedHandSigns[unlockedHandSignIndex] = true;
+        return true;
     }
 }

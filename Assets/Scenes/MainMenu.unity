@@ -2082,6 +2082,7 @@ MonoBehaviour:
   storeButton: {fileID: 613001036}
   profileButton: {fileID: 1668032004}
   signOutButton: {fileID: 1078456390}
+  cancelButton: {fileID: 1877301766}
   waitingPanel: {fileID: 2081681491}
 --- !u!1 &1877301764
 GameObject:
@@ -2096,7 +2097,7 @@ GameObject:
   - component: {fileID: 1877301767}
   - component: {fileID: 1877301766}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Cancel Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

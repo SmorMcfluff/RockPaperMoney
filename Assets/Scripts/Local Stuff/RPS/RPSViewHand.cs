@@ -27,11 +27,18 @@ public class RPSViewHand : MonoBehaviour
 
         Skin skin = SkinManager.Instance.GetSkin(equippedSkin);
 
+
         ArmSprites armSprites = (playerLetter == PlayerLetter.A) ? skin.playerAArmSprites : skin.playerBArmSprites;
         HandSprites handSprites = (playerLetter == PlayerLetter.A) ? skin.playerAHandSprites : skin.playerBHandSprites;
 
         upperArmSr.sprite = armSprites.upperArm;
         lowerArmSr.sprite = armSprites.lowerArm;
+
+        if (skin.skin == SkinType.Stickman)
+        {
+            handSr.enabled = false;
+            return;
+        }
 
         handSr.sprite = handSprites.defaultHandSprite;
         paperSprites = handSprites.paperSprites;
@@ -54,6 +61,7 @@ public class RPSViewHand : MonoBehaviour
 
     private void PlayHandAnimation(HandSign handSign)
     {
+
         switch (handSign)
         {
             case HandSign.Paper:

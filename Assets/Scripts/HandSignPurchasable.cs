@@ -13,18 +13,25 @@ public class HandSignPurchasable : PurchasableObject
         SkinType equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin;
         Sprite[] icons = SkinManager.Instance.GetIcons(equippedSkin);
 
-        icon = unlockedHandSignIndex switch
+        if (icons.Length > 0)
         {
-            0 => icons[0],
-            1 => icons[1],
-            2 => icons[2],
-            _ => null
-        };
+            icon = unlockedHandSignIndex switch
+            {
+                0 => icons[0],
+                1 => icons[1],
+                2 => icons[2],
+                _ => null
+            };
+        }
+        else
+        {
+             icon = SkinManager.Instance.GetSkin(equippedSkin).icon;
+        }
     }
 
     public override bool GetBought()
     {
-        if(!base.GetBought())
+        if (!base.GetBought())
         {
             return false;
         }

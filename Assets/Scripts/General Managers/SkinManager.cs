@@ -35,6 +35,11 @@ public class SkinManager : MonoBehaviour
         int lastPaperIndex = skin.playerAHandSprites.paperSprites.Length - 1;
         int lastScissorIndex = skin.playerAHandSprites.scissorSprites.Length - 1;
 
+        //if(skin.skin == SkinType.Stickman)
+        //{
+        //    return new Sprite[0];
+        //}
+
         return new Sprite[]
         {
             skin.playerAHandSprites.defaultHandSprite,

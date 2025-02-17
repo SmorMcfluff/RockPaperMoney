@@ -58,7 +58,7 @@ public class PreviewManager : MonoBehaviour
     {
         float screenWidth = cam.ScreenToWorldPoint(new Vector3(Screen.width, 0, zDepth)).x;
 
-        float targetWidth = screenWidth / 2;
+        float targetWidth = screenWidth / 3;
 
         float armAWidth = GetArmWidth(playerAArm);
         float armBWidth = GetArmWidth(playerBArm);
@@ -109,13 +109,16 @@ public class PreviewManager : MonoBehaviour
     public void ActivatePreview(SkinType skinToPreview)
     {
         previewIsActive = true;
+        SetArmVisibilty(previewIsActive);
 
         SetSkins(skinToPreview);
         endPreviewButton.gameObject.SetActive(true);
         backButton.gameObject.SetActive(false);
 
-        SetArmVisibilty(previewIsActive);
-        StartCoroutine(CycleHandSigns());
+        if (skinToPreview != SkinType.Stickman)
+        {
+            StartCoroutine(CycleHandSigns());
+        }
 
         if (StoreManager.Instance != null)
         {
@@ -172,29 +175,52 @@ public class PreviewManager : MonoBehaviour
 
     private void SetPlayerASkin(Skin skin)
     {
-        int lastPaperIndex = skin.playerAHandSprites.paperSprites.Length - 1;
-        int lastScissorIndex = skin.playerAHandSprites.scissorSprites.Length - 1;
-
         playerAUpperArm.sprite = skin.playerAArmSprites.upperArm;
         playerALowerArm.sprite = skin.playerAArmSprites.lowerArm;
 
+        if (skin.skin == SkinType.Stickman)
+        {
+            playerAHand.enabled = false;
+            return;
+        }
+        else if (!playerAHand.enabled)
+        {
+            playerAHand.enabled = true;
+        }
+
+        int lastPaperIndex = skin.playerAHandSprites.paperSprites.Length - 1;
+        int lastScissorIndex = skin.playerAHandSprites.scissorSprites.Length - 1;
+
+
         playerAHandSprites = new Sprite[]
         {
-
             skin.playerAHandSprites.defaultHandSprite,
             skin.playerAHandSprites.paperSprites[lastPaperIndex],
             skin.playerAHandSprites.scissorSprites[lastScissorIndex],
         };
+
     }
 
 
     private void SetPlayerBSkin(Skin skin)
     {
+        playerBUpperArm.sprite = skin.playerBArmSprites.upperArm;
+        playerBLowerArm.sprite = skin.playerBArmSprites.lowerArm;
+
+        if (skin.skin == SkinType.Stickman)
+        {
+            playerBHand.enabled = false;
+            return;
+        }
+        else if (!playerBHand.enabled)
+        {
+            playerBHand.enabled = true;
+        }
+
         int lastPaperIndex = skin.playerBHandSprites.paperSprites.Length - 1;
         int lastScissorIndex = skin.playerBHandSprites.scissorSprites.Length - 1;
 
-        playerBUpperArm.sprite = skin.playerBArmSprites.upperArm;
-        playerBLowerArm.sprite = skin.playerBArmSprites.lowerArm;
+
         playerBHandSprites = new Sprite[]
         {
             skin.playerBHandSprites.defaultHandSprite,

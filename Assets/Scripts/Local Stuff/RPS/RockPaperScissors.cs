@@ -14,6 +14,7 @@ public class RockPaperScissors : MonoBehaviour
     float roundMaxLength = 15f;
 
     Button[] handsignButtons;
+    [SerializeField] Image[] handSignBackgroundImgs;
     [SerializeField] Button rockButton;
     [SerializeField] Button paperButton;
     [SerializeField] Button scissorsButton;
@@ -62,7 +63,11 @@ public class RockPaperScissors : MonoBehaviour
         var unlockedHandSigns = SaveDataManager.Instance.localPlayerData.unlockedHandSigns;
         for (int i = 0; i < handsignButtons.Length; i++)
         {
-            handsignButtons[i].image.sprite = icons[i];
+            if(icons.Length > 0)
+            {
+                handsignButtons[i].image.sprite = icons[i];
+            }
+
 
             if (!unlockedHandSigns[i])
             {
@@ -94,14 +99,18 @@ public class RockPaperScissors : MonoBehaviour
                 if (i == buttonIndex)
                 {
                     handsignButtons[i].image.color = Color.green;
+                    handSignBackgroundImgs[i].color = Color.green;
                 }
                 else if (unlockedHandSigns[i])
                 {
                     handsignButtons[i].image.color = Color.white;
+                    handSignBackgroundImgs[i].color = Color.white;
+
                 }
                 else
                 {
                     handsignButtons[i].image.color = Color.gray;
+                    handSignBackgroundImgs[i].color = Color.white;
                 }
             }
         }

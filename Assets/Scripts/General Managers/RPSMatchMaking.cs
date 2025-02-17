@@ -203,6 +203,13 @@ public class RPSMatchMaking : MonoBehaviour
     }
 
 
+    public async void CancelMatchMaking()
+    {
+        await RemoveWaitingGame();
+        MainMenuManager.Instance.ToggleWaitingPanel();
+    }
+
+
     public async Task RemoveWaitingGame()
     {
         await db.RootReference.Child("waitingGames").Child(gameData.gameID).RemoveValueAsync();

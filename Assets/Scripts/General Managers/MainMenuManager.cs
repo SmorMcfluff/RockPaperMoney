@@ -11,6 +11,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] Button storeButton;
     [SerializeField] Button profileButton;
     [SerializeField] Button signOutButton;
+    [SerializeField] Button cancelButton;
     public GameObject waitingPanel;
 
 
@@ -26,6 +27,7 @@ public class MainMenuManager : MonoBehaviour
         storeButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Store"); });
         profileButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Profile"); });
         signOutButton.onClick.AddListener(delegate { LoginManager.Instance.SignOut(); });
+        cancelButton.onClick.AddListener(delegate { RPSMatchMaking.Instance.CancelMatchMaking(); });
     }
 
 

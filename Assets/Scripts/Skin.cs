@@ -32,7 +32,11 @@ public class Skin : PurchasableObject
     public override void GetIcon()
     {
         var icons = SkinManager.Instance.GetIcons(skin);
-        icon = icons[0];
+
+        if(icons.Length > 0)
+        {
+            icon = icons[0];
+        }
     }
 
 
@@ -55,5 +59,12 @@ public enum SkinType
     Light,
     Neutral,
     Tan,
-    Dark
+    Dark,
+    DefaultGloved,
+    PaleGloved,
+    LightGloved,
+    NeutralGloved,
+    TanGloved,
+    DarkGloved,
+    Stickman
 }

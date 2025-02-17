@@ -1,11 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PreviewManager : MonoBehaviour
 {
     public static PreviewManager Instance;
 
-    [SerializeField] public GameObject previewScreen;
+    public GameObject previewScreen;
+    [SerializeField] private Button endPreviewButton;
+    [SerializeField] private Button backButton;
 
     [SerializeField] private Transform playerAArm;
     [SerializeField] private Transform playerBArm;
@@ -28,6 +31,7 @@ public class PreviewManager : MonoBehaviour
     {
         Instance = this;
         AlignArmToScreen();
+        SetArmVisibilty(false);
     }
 
 
@@ -36,10 +40,12 @@ public class PreviewManager : MonoBehaviour
         Camera cam = Camera.main;
         float zDepth = Mathf.Abs(cam.transform.position.z - playerAArm.position.z);
 
-        float yPos = cam.WorldToScreenPoint(playerAArm.position).y;
+        float playerAY = cam.WorldToScreenPoint(playerAArm.position).y;
+        float playerBY = cam.WorldToScreenPoint(playerBArm.position).y;
 
-        Vector3 playerAPos = cam.ScreenToWorldPoint(new Vector3(0, yPos, zDepth));
-        Vector3 playerBPos = cam.ScreenToWorldPoint(new Vector3(Screen.width, yPos, zDepth));
+
+        Vector3 playerAPos = cam.ScreenToWorldPoint(new Vector3(0, playerAY, zDepth));
+        Vector3 playerBPos = cam.ScreenToWorldPoint(new Vector3(Screen.width, playerBY, zDepth));
 
         playerAArm.position = playerAPos;
         playerBArm.position = playerBPos;
@@ -96,9 +102,7 @@ public class PreviewManager : MonoBehaviour
 
                 yield return new WaitForSeconds(0.5f);
             }
-            yield return null;
         }
-        yield break;
     }
 
 
@@ -107,16 +111,54 @@ public class PreviewManager : MonoBehaviour
         previewIsActive = true;
 
         SetSkins(skinToPreview);
-        previewScreen.SetActive(true);
-        StoreManager.Instance.storePanel.SetActive(false);
+        endPreviewButton.gameObject.SetActive(true);
+        backButton.gameObject.SetActive(false);
+
+        SetArmVisibilty(previewIsActive);
         StartCoroutine(CycleHandSigns());
+
+        if (StoreManager.Instance != null)
+        {
+            StoreManager.Instance.storePanel.SetActive(false);
+        }
+        else if (SkinViewer.Instance != null)
+        {
+            SkinViewer.Instance.skinViewPanel.SetActive(false);
+        }
     }
+
 
     public void DeactivatePreview()
     {
         previewIsActive = false;
-        previewScreen.SetActive(false);
-        StoreManager.Instance.storePanel.SetActive(true);
+        endPreviewButton.gameObject.SetActive(false);
+        backButton.gameObject.SetActive(true);
+
+        SetArmVisibilty(previewIsActive);
+        StopCoroutine(CycleHandSigns());
+
+        if (StoreManager.Instance != null)
+        {
+            StoreManager.Instance.GenerateStoreItems();
+            StoreManager.Instance.storePanel.SetActive(true);
+        }
+        else if (SkinViewer.Instance != null)
+        {
+            SkinViewer.Instance.skinViewPanel.SetActive(true);
+        }
+
+    }
+
+
+    private void SetArmVisibilty(bool status)
+    {
+        playerAUpperArm.enabled = status;
+        playerALowerArm.enabled = status;
+        playerAHand.enabled = status;
+
+        playerBUpperArm.enabled = status;
+        playerBLowerArm.enabled = status;
+        playerBHand.enabled = status;
     }
 
 
@@ -145,10 +187,11 @@ public class PreviewManager : MonoBehaviour
         };
     }
 
+
     private void SetPlayerBSkin(Skin skin)
     {
-        int lastPaperIndex = skin.playerAHandSprites.paperSprites.Length - 1;
-        int lastScissorIndex = skin.playerAHandSprites.scissorSprites.Length - 1;
+        int lastPaperIndex = skin.playerBHandSprites.paperSprites.Length - 1;
+        int lastScissorIndex = skin.playerBHandSprites.scissorSprites.Length - 1;
 
         playerBUpperArm.sprite = skin.playerBArmSprites.upperArm;
         playerBLowerArm.sprite = skin.playerBArmSprites.lowerArm;

@@ -10,6 +10,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] Button idleGameButton;
     [SerializeField] Button storeButton;
     [SerializeField] Button profileButton;
+    [SerializeField] Button signOutButton;
     public GameObject waitingPanel;
 
 
@@ -23,7 +24,8 @@ public class MainMenuManager : MonoBehaviour
         RPSButton.onClick.AddListener(delegate { RPSMatchMaking.Instance.ConnectToGame(); });
         idleGameButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("IdleGameScene"); });
         storeButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Store"); });
-        profileButton.onClick.AddListener(delegate { LoginManager.Instance.SignOut(); });
+        profileButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Profile"); });
+        signOutButton.onClick.AddListener(delegate { LoginManager.Instance.SignOut(); });
     }
 
 

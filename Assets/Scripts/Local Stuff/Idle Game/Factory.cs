@@ -79,11 +79,15 @@ public class Factory
 
         SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(vendAmount);
 
-        try
+        if (IdleGameUIManager.Instance != null)
         {
             IdleGameUIManager.Instance.UpdateMoneyText();
         }
-        catch { }
+
+        if (StoreManager.Instance != null)
+        {
+            StoreManager.Instance.UpdateBalanceText();
+        }
     }
 
     public float GetUpgradedMoneyToVend()

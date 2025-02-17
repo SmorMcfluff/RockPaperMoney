@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public class StoreManager : MonoBehaviour
 {
     public enum StoreCategory { HandSigns, Skins }
 
-    public StoreCategory currentCategory = StoreCategory.HandSigns;
+    public StoreCategory currentCategory = StoreCategory.Skins;
 
     public static StoreManager Instance;
 
@@ -23,6 +24,8 @@ public class StoreManager : MonoBehaviour
     [SerializeField] private List<StoreItemUI> handSignItems;
     [SerializeField] private List<StoreItemUI> skinItems;
 
+    [SerializeField] private TextMeshProUGUI balanceText;
+
 
     private void Awake()
     {
@@ -36,9 +39,10 @@ public class StoreManager : MonoBehaviour
         }
     }
 
+
     private void Start()
     {
-        GenerateStoreItems();
+        UpdateBalanceText();
 
         SetCategoryButtonColor(currentCategory);
         SetCategoryButtonInteractable(currentCategory);
@@ -126,9 +130,21 @@ public class StoreManager : MonoBehaviour
         }
     }
 
+
     private void SetCategoryButtonInteractable(StoreCategory category)
     {
         handSignButton.interactable = (category != StoreCategory.HandSigns);
         skinButton.interactable = (category != StoreCategory.Skins);
+    }
+
+
+    public void UpdateBalanceText()
+    {
+        balanceText.text = "Balance: $" + SaveDataManager.Instance.localPlayerData.moneyBalance;
+
+        if (PreviewManager.Instance.previewIsActive)
+        {
+            GenerateStoreItems();
+        }
     }
 }

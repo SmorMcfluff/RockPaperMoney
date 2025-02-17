@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Light
   price: 10000
-  icon: {fileID: -9005164296155538828, guid: 2567e24d245a2a64f887ea8d98b1cb3a, type: 3}
+  icon: {fileID: 21300000, guid: 2567e24d245a2a64f887ea8d98b1cb3a, type: 3}
   skin: 2
   playerAArmSprites:
     upperArm: {fileID: 21300000, guid: 973cb0134fd5f504fb4bf3f004065b22, type: 3}
@@ -36,7 +36,7 @@ MonoBehaviour:
     paperSprites:
     - {fileID: 21300000, guid: 9e1f6b5287111114f8ce9481ca3e0f02, type: 3}
     - {fileID: 21300000, guid: 890d03fa1311a4c4798568371ec21e85, type: 3}
-    - {fileID: 21300000, guid: 213239186c07e9848bca7558289f6e8c, type: 3}
+    - {fileID: 21300000, guid: 3bc150e0c8799bb4abe0d6986338e050, type: 3}
     scissorSprites:
     - {fileID: 21300000, guid: 286532fac325b6044a3b85d4b63dd78c, type: 3}
     - {fileID: 21300000, guid: 44285f460a8544a41b1fd9d3af4aaeb7, type: 3}

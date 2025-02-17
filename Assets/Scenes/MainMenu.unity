@@ -823,7 +823,6 @@ GameObject:
   - component: {fileID: 601355601}
   - component: {fileID: 601355600}
   - component: {fileID: 601355599}
-  - component: {fileID: 601355603}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -915,23 +914,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &601355603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 601355598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ab41ac0ee4634c4795cdd9cc760abde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RPSButton: {fileID: 626922773}
-  idleGameButton: {fileID: 1788288500}
-  storeButton: {fileID: 613001036}
-  profileButton: {fileID: 1078456390}
-  waitingPanel: {fileID: 2081681491}
 --- !u!1 &613001034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1957,6 +1939,7 @@ GameObject:
   - component: {fileID: 1818948426}
   - component: {fileID: 1818948425}
   - component: {fileID: 1818948428}
+  - component: {fileID: 1818948429}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2082,6 +2065,24 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1818948429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818948424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ab41ac0ee4634c4795cdd9cc760abde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RPSButton: {fileID: 626922773}
+  idleGameButton: {fileID: 1788288500}
+  storeButton: {fileID: 613001036}
+  profileButton: {fileID: 1668032004}
+  signOutButton: {fileID: 1078456390}
+  waitingPanel: {fileID: 2081681491}
 --- !u!1 &1877301764
 GameObject:
   m_ObjectHideFlags: 0
@@ -2165,7 +2166,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 601355603}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
         m_MethodName: ToggleWaitingPanel
         m_Mode: 1

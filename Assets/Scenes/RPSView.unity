@@ -497,7 +497,7 @@ MonoBehaviour:
   returnButton: {fileID: 767053042}
   playerAArm: {fileID: 751682609}
   playerBArm: {fileID: 1253013313}
-  padding: -25
+  padding: -100
 --- !u!1 &751682608
 GameObject:
   m_ObjectHideFlags: 0

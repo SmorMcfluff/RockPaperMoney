@@ -22,7 +22,7 @@ public class StoreItemUI : MonoBehaviour
 
         SetColor();
 
-        if(purchasableObject is Skin)
+        if (purchasableObject is Skin)
         {
             SetUpPreviewButton();
         }
@@ -34,7 +34,12 @@ public class StoreItemUI : MonoBehaviour
         PlayerData player = SaveDataManager.Instance.localPlayerData;
         if (!purchasableObject.IsAffordable(player))
         {
+            Debug.Log(gameObject.name + "COLOR GRAY");
             buyButton.image.color = Color.gray;
+        }
+        else
+        {
+            buyButton.image.color = Color.white;
         }
     }
 

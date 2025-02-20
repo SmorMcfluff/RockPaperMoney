@@ -54,6 +54,7 @@ public class SaveDataManager : MonoBehaviour
             if (snap == null || snap.GetRawJsonValue() == null)
             {
                 Debug.LogWarning("Data snapshot is null or empty.");
+                playerIsLoaded = true;
                 return;
             }
 
@@ -101,7 +102,6 @@ public class SaveDataManager : MonoBehaviour
         {
             return;
         }
-
         if (FirebaseAuth.DefaultInstance.CurrentUser != null)
         {
             var db = FirebaseDatabase.DefaultInstance;

@@ -108,6 +108,7 @@ public class PreviewManager : MonoBehaviour
 
     public void ActivatePreview(SkinType skinToPreview)
     {
+        Debug.Log("Wowza");
         previewIsActive = true;
         SetArmVisibilty(previewIsActive);
 

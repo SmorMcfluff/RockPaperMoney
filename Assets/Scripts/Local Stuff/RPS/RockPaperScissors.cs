@@ -13,6 +13,8 @@ public class RockPaperScissors : MonoBehaviour
     float timer = 0;
     float roundMaxLength = 15f;
 
+    Color defaultBgImgColor;
+
     Button[] handsignButtons;
     [SerializeField] Image[] handSignBackgroundImgs;
     [SerializeField] Button rockButton;
@@ -36,6 +38,8 @@ public class RockPaperScissors : MonoBehaviour
         SetHandSignButtons();
         UpdatePlayerOnFirebase();
         Subscribe();
+
+        defaultBgImgColor = handSignBackgroundImgs[0].color;
     }
 
 
@@ -61,9 +65,9 @@ public class RockPaperScissors : MonoBehaviour
         Sprite[] icons = SkinManager.Instance.GetIcons(equippedSkin);
 
         var unlockedHandSigns = SaveDataManager.Instance.localPlayerData.unlockedHandSigns;
-        for (int i = 0; i < handsignButtons.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            if(icons.Length > 0)
+            if (icons.Length > 0)
             {
                 handsignButtons[i].image.sprite = icons[i];
             }
@@ -73,6 +77,7 @@ public class RockPaperScissors : MonoBehaviour
             {
                 handsignButtons[i].interactable = false;
                 handsignButtons[i].image.color = Color.gray;
+                handSignBackgroundImgs[i].color = Color.gray;
             }
         }
     }
@@ -94,23 +99,20 @@ public class RockPaperScissors : MonoBehaviour
             RPSMatchMaking.Instance.localPlayer.handSign = handSign;
 
             var unlockedHandSigns = SaveDataManager.Instance.localPlayerData.unlockedHandSigns;
-            for (int i = 0; i < handsignButtons.Length; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (i == buttonIndex)
                 {
-                    handsignButtons[i].image.color = Color.green;
                     handSignBackgroundImgs[i].color = Color.green;
                 }
                 else if (unlockedHandSigns[i])
                 {
                     handsignButtons[i].image.color = Color.white;
-                    handSignBackgroundImgs[i].color = Color.white;
-
+                    handSignBackgroundImgs[i].color = defaultBgImgColor;
                 }
                 else
                 {
-                    handsignButtons[i].image.color = Color.gray;
-                    handSignBackgroundImgs[i].color = Color.white;
+                    handSignBackgroundImgs[i].color = defaultBgImgColor;
                 }
             }
         }

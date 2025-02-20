@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e754c5926ee29d943961f48826d7432d, type: 3}
+  m_Name: Literal
+  m_EditorClassIdentifier: 
+  itemName: Literal
+  price: 100000
+  icon: {fileID: 21300000, guid: 00f8c3a95baf384439635d2642b834a6, type: 3}
+  skin: 13
+  playerAArmSprites:
+    upperArm: {fileID: 21300000, guid: 6773a9089a76f8147aff7d73b2e13791, type: 3}
+    lowerArm: {fileID: 21300000, guid: 5fca2ed8adf58414ca2dd4ca84a26cbd, type: 3}
+  playerBArmSprites:
+    upperArm: {fileID: 21300000, guid: 6818c65292cc56446be9e36e1fe2cc63, type: 3}
+    lowerArm: {fileID: 21300000, guid: 345e2d5418d423942b724e43d9aebeaf, type: 3}
+  playerAHandSprites:
+    defaultHandSprite: {fileID: 21300000, guid: 00f8c3a95baf384439635d2642b834a6, type: 3}
+    paperSprites:
+    - {fileID: 21300000, guid: 97a58978fae70c34a8ea1043c5920434, type: 3}
+    - {fileID: 21300000, guid: d9cc243c25f93b843a58267615113790, type: 3}
+    - {fileID: 21300000, guid: b188f966deb4a4640833d0d4383fcf91, type: 3}
+    - {fileID: 21300000, guid: eeebe4108c64c7c42a95b91bea141927, type: 3}
+    - {fileID: 21300000, guid: 5315a932584251348a58d42db1aa4cec, type: 3}
+    - {fileID: 21300000, guid: 700511e2eeb4fd24b9ac5ec90415112c, type: 3}
+    - {fileID: 21300000, guid: 3eb9295a745f1684796f0022369faf14, type: 3}
+    - {fileID: 21300000, guid: c63f3fea1f633954eb55fd22869bc032, type: 3}
+    scissorSprites:
+    - {fileID: 21300000, guid: 15a718b9a51077845b9c2aa7a544137c, type: 3}
+    - {fileID: 21300000, guid: b1431e907a3afea4283a9a05080ec7b4, type: 3}
+    - {fileID: 21300000, guid: 1ff757f2958262a4f95691aab72c7a6a, type: 3}
+    - {fileID: 21300000, guid: 088c2c90e09ea454998cd086a6a94722, type: 3}
+    - {fileID: 21300000, guid: 45d9a29c1b2c1df4797495273534ebb4, type: 3}
+    - {fileID: 21300000, guid: 64dcc04e8ec05fd44a4d45e85ef0e789, type: 3}
+    - {fileID: 21300000, guid: 1a835b2cb4f0d7b47a130ab0d3121af3, type: 3}
+    - {fileID: 21300000, guid: ec66ae5c5dae702478311feca308f0ac, type: 3}
+    - {fileID: 21300000, guid: c359297a06476084a8aff294342100f6, type: 3}
+  playerBHandSprites:
+    defaultHandSprite: {fileID: 21300000, guid: 5344df1bc53f3a94b99bb627efdbb146, type: 3}
+    paperSprites:
+    - {fileID: 21300000, guid: 2efeebd9e9309c44ea342b70fdb9c5c6, type: 3}
+    - {fileID: 21300000, guid: 01bcb1f1f28960f4397c8ee2ec31b5b6, type: 3}
+    - {fileID: 21300000, guid: d1221fd6081723644bcafcf2faf42a20, type: 3}
+    - {fileID: 21300000, guid: 1e09df747f0b0fc43a99c1e103fa36bf, type: 3}
+    - {fileID: 21300000, guid: c2218d328e461394c8342867c63c966e, type: 3}
+    - {fileID: 21300000, guid: 7ff54e4ff45c2b04e92f985b509ccadf, type: 3}
+    - {fileID: 21300000, guid: f2fd4775be743784aaf34336ea730f6a, type: 3}
+    - {fileID: 21300000, guid: 77f5154456e183f4ea3be825c94b30fd, type: 3}
+    scissorSprites:
+    - {fileID: 21300000, guid: 9b05ab5205f781847b8fbe9a8977258c, type: 3}
+    - {fileID: 21300000, guid: a482161f15876474599464965a79d582, type: 3}
+    - {fileID: 21300000, guid: 177661b2fd32a034482813c432c565b9, type: 3}
+    - {fileID: 21300000, guid: 4e955ec1bce9dc6418cda2ce4a1581de, type: 3}
+    - {fileID: 21300000, guid: b71c572a4ecf42b4bb7b2a8afaa44a01, type: 3}
+    - {fileID: 21300000, guid: 4a9c765312eeb0c4a9fe03ce712d54b9, type: 3}
+    - {fileID: 21300000, guid: b1340792792b60641877e6cc8f96585e, type: 3}
+    - {fileID: 21300000, guid: 82c1cd6d02f90114bad11cb827b2d69d, type: 3}
+    - {fileID: 21300000, guid: 3a902430cd804af438e4e4f20dcf69f2, type: 3}

@@ -66,5 +66,6 @@ public enum SkinType
     NeutralGloved,
     TanGloved,
     DarkGloved,
-    Stickman
+    Stickman,
+    Literal
 }

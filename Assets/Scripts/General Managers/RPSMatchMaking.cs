@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using Firebase.Auth;
 
 public class RPSMatchMaking : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class RPSMatchMaking : MonoBehaviour
     bool gameIsStarting = false;
 
     FirebaseDatabase db;
+    FirebaseAuth auth;
+    string userId;
 
     public RPSGameData gameData;
     public RPSPlayer localPlayer;
@@ -38,13 +41,8 @@ public class RPSMatchMaking : MonoBehaviour
         }
 
         db = FirebaseDatabase.DefaultInstance;
-    }
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-            ConnectToGame();
+        auth = FirebaseAuth.DefaultInstance;
+        userId = auth.CurrentUser.UserId;
     }
 
 
@@ -80,7 +78,7 @@ public class RPSMatchMaking : MonoBehaviour
         bool managedToConnect = false;
         foreach (var rpsGame in rpsGames)
         {
-            if (!rpsGame.playerBConnected)
+            if (!rpsGame.playerBConnected && rpsGame.hostUserId != userId)
             {
                 gameData = rpsGame;
 
@@ -123,7 +121,8 @@ public class RPSMatchMaking : MonoBehaviour
             isPlayerA = true
         };
 
-        var rpsGame = new RPSGameData(localPlayer);
+        userId = auth.CurrentUser.UserId;
+        var rpsGame = new RPSGameData(localPlayer, userId);
         var rpsGameJson = JsonUtility.ToJson(rpsGame);
 
         gameData = rpsGame;
@@ -166,7 +165,6 @@ public class RPSMatchMaking : MonoBehaviour
 
                 if (data.playerAConnected && data.playerBConnected)
                 {
-                    Debug.Log("Both players are connected! Starting game...");
                     StartGame();
                 }
             });
@@ -177,7 +175,6 @@ public class RPSMatchMaking : MonoBehaviour
     private async void StartGame()
     {
         gameIsStarting = true;
-        Debug.Log("Starting Game");
 
         db.RootReference.Child("waitingGames").Child(gameData.gameID).ValueChanged -= ValueChanged;
 

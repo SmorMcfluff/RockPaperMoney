@@ -19,7 +19,7 @@ public class RPSMatchMaking : MonoBehaviour
 
     FirebaseDatabase db;
     FirebaseAuth auth;
-    string userId;
+    public string userId;
 
     public RPSGameData gameData;
     public RPSPlayer localPlayer;
@@ -42,7 +42,6 @@ public class RPSMatchMaking : MonoBehaviour
 
         db = FirebaseDatabase.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
-        userId = auth.CurrentUser.UserId;
     }
 
 

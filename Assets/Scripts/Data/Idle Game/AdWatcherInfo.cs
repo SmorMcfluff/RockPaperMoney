@@ -13,7 +13,17 @@ public class AdWatcherInfo
 
     public AdWatcherInfo()
     {
-        var countryCount = System.Enum.GetNames(typeof(Country)).Length;
+        if (!SaveDataManager.Instance.localPlayerData.hasAdam && Random.Range(0, 69) == 0)
+        {
+            country = Country.Yrgo;
+            sex = Sex.Male;
+            firstName = "Adam";
+            lastName = "Mcfluff";
+            age = GetAdamsAge();
+            return;
+        }
+
+        var countryCount = System.Enum.GetNames(typeof(Country)).Length - 1;
         country = (Country)Random.Range(0, countryCount);
         sex = (Sex)Random.Range(0, 2);
 
@@ -23,14 +33,30 @@ public class AdWatcherInfo
 
         appearance = new CharacterAppearance(this);
     }
+
+    private int GetAdamsAge()
+    {
+        System.DateTime today = System.DateTime.UtcNow.Date;
+        System.DateTime birthDate = new(2001, 4, 13);
+
+        int age = today.Year - birthDate.Year;
+
+        if (birthDate.Date > today.AddYears(-age))
+        {
+            age--;
+        }
+        return age;
+    }
 }
+
 
 public enum Country
 {
     China, India, Japan,
     Malaysia, Mexico, ThePhilippines,
-    Russia
+    Russia, Yrgo
 }
+
 
 public enum Sex
 {

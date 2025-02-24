@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class BackButton : MonoBehaviour
 {
     [SerializeField] string targetScene = "MainMenu";

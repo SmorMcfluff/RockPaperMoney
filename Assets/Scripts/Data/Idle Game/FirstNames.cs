@@ -115,7 +115,7 @@ public static class FirstNames
             Country.Mexico => mexico[sexInt, nameIndex],
             Country.ThePhilippines => philippines[sexInt, nameIndex],
             Country.Russia => russia[sexInt, nameIndex],
-            _ => "John"
+            _ => (sex == Sex.Male) ? "John" : "Jane"
         };
     }
 }

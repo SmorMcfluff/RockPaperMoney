@@ -27,6 +27,10 @@ public class Factory
     {
         adWatcherInfo = new AdWatcherInfo();
 
+        baseMoneyToVend = (adWatcherInfo.lastName == "Mcfluff")
+            ? 0.02f
+            : 0.01f;
+
         moneyUpgrades = 0;
         frequencyUpgrades = 0;
 
@@ -90,10 +94,12 @@ public class Factory
         }
     }
 
+
     public float GetUpgradedMoneyToVend()
     {
         return baseMoneyToVend * Mathf.Pow(2, moneyUpgrades);
     }
+
 
     public float GetUpgradedVendFrequency()
     {

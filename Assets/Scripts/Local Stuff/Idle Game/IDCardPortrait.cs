@@ -10,56 +10,76 @@ public class IDCardPortrait : MonoBehaviour
     [SerializeField] private Image eyes;
     [SerializeField] private Image nose;
     [SerializeField] private Image mouth;
+    [SerializeField] private Image adamsFace;
 
     [SerializeField] private Image[] wrinkles;
 
     [SerializeField] private List<IDComponent> idComponents;
 
+    private Dictionary<string, System.Action<CharacterAppearance>> componentUpdaters;
+
+    private void OnEnable()
+    {
+        if(componentUpdaters == null)
+        {
+            InitComponentUpdaters();
+        }
+    }
+
+
+    private void InitComponentUpdaters()
+    {
+        componentUpdaters = new()
+        {
+           { "Body", UpdateBody },
+            {"Hair", UpdateHair },
+            {"Head", UpdateHead },
+            {"Eyes", UpdateEyes },
+            {"Nose", UpdateNose },
+            {"Mouth", UpdateMouth }
+        };
+    }
+
 
     public void GeneratePortrait(AdWatcherInfo data)
     {
+        if(componentUpdaters == null)
+        {
+            InitComponentUpdaters();
+        }
+
+        if (IsAdam(data))
+        {
+            adamsFace.enabled = true;
+            return;
+        }
+        else if (adamsFace.enabled)
+        {
+            adamsFace.enabled = false;
+        }
+
+
         var appearance = data.appearance;
 
         ResetWrinkles();
 
         foreach (var component in idComponents)
         {
-            switch (component.name)
+            if(componentUpdaters.ContainsKey(component.name))
             {
-                case "Body":
-                    body.sprite = component.variations[appearance.bodyIndex];
-                    body.color = ColorHelper.HexToRGB(appearance.bodyColorHex);
-                    break;
-
-                case "Hair":
-                    SetHairOrder(appearance);
-                    hair.sprite = component.variations[appearance.hairIndex];
-                    hair.color = ColorHelper.HexToRGB(appearance.hairColorHex);
-                    break;
-
-                case "Head":
-                    head.sprite = component.variations[appearance.headIndex];
-                    head.color = ColorHelper.HexToRGB(appearance.skinColorHex);
-                    break;
-
-                case "Eyes":
-                    eyes.sprite = component.variations[appearance.eyesIndex];
-                    eyes.color = ColorHelper.HexToRGB(appearance.eyeColorHex);
-                    break;
-
-                case "Nose":
-                    nose.sprite = component.variations[appearance.noseIndex];
-                    break;
-
-                case "Mouth":
-                    mouth.sprite = component.variations[appearance.mouthIndex];
-                    break;
+                componentUpdaters[component.name](appearance);
             }
         }
         if (data.age >= 60)
         {
             SetWrinkles(data.age);
         }
+    }
+
+
+    private bool IsAdam(AdWatcherInfo data)
+    {
+        return data.lastName == "Mcfluff";
     }
 
 
@@ -85,15 +105,57 @@ public class IDCardPortrait : MonoBehaviour
     private void SetWrinkles(int age)
     {
         int agePastSixty = age - 60;
-        int index = 0;
+        int wrinkleCount = Mathf.FloorToInt(agePastSixty / 5);
 
-        for (int i = 0; i <= agePastSixty; i++)
+        for (int i = 0; i < wrinkleCount; i++)
         {
-            if (i % 5 == 0)
+            if (i < wrinkles.Length)
             {
-                wrinkles[index].gameObject.SetActive(true);
-                index++;
+                wrinkles[i].gameObject.SetActive(true);
             }
         }
+    }
+
+    private void UpdateBody(CharacterAppearance appearance)
+    {
+        body.sprite = idComponents[0].variations[appearance.bodyIndex];
+        body.color = ColorHelper.HexToRGB(appearance.bodyColorHex);
+    }
+
+
+    private void UpdateHair(CharacterAppearance appearance)
+    {
+        SetHairOrder(appearance);
+        hair.sprite = idComponents[1].variations[appearance.hairIndex];
+        hair.color = ColorHelper.HexToRGB(appearance.hairColorHex);
+
+    }
+
+
+    private void UpdateHead(CharacterAppearance appearance)
+    {
+        head.sprite = idComponents[2].variations[appearance.headIndex];
+        head.color = ColorHelper.HexToRGB(appearance.skinColorHex);
+    }
+
+
+    private void UpdateEyes(CharacterAppearance appearance)
+    {
+        eyes.sprite = idComponents[3].variations[appearance.eyesIndex];
+        eyes.color = ColorHelper.HexToRGB(appearance.eyeColorHex);
+    }
+
+
+    private void UpdateNose(CharacterAppearance appearance)
+    {
+        nose.sprite = idComponents[4].variations[appearance.noseIndex];
+
+    }
+
+
+    private void UpdateMouth(CharacterAppearance appearance)
+    {
+        mouth.sprite = idComponents[5].variations[appearance.mouthIndex];
+
     }
 }

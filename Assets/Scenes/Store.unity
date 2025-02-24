@@ -13983,7 +13983,7 @@ MonoBehaviour:
   handSignButton: {fileID: 1317917815}
   skinButton: {fileID: 211982260}
   storePanel: {fileID: 1966261423}
-  storeCategories:
+  storeCategoryPanels:
   - {fileID: 1391566583}
   - {fileID: 435826407}
   handSignsCategory: {fileID: 1396434509}

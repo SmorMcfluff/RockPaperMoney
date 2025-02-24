@@ -56,7 +56,7 @@ public class LoginManager : MonoBehaviour
                 {
                     case AuthError.EmailAlreadyInUse:
                         message = "Attempting Log In";
-                        SignIn(email, password);
+                        SignIn();
                         break;
                     case AuthError.MissingEmail:
                         message = "Missing Email";
@@ -84,14 +84,18 @@ public class LoginManager : MonoBehaviour
                 var saveData = SaveDataManager.Instance.localPlayerData;
 
                 SaveDataManager.Instance.SavePlayer();
-                Invoke(nameof(SignIn), 1.5f);
+                Invoke(nameof(SignIn), 0.5f);
             }
         });
     }
 
 
-    private void SignIn(string email, string password)
+    private void SignIn()
     {
+        string[] credentials = GetCredentials();
+        string email = credentials[0];
+        string password = credentials[1];
+
         auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
@@ -134,6 +138,7 @@ public class LoginManager : MonoBehaviour
 
                 Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
 
+                RPSMatchMaking.Instance.userId = auth.CurrentUser.UserId;
                 SaveDataManager.Instance.LoadPlayer();
                 SceneController.Instance.GoToScene("MainMenu");
             }

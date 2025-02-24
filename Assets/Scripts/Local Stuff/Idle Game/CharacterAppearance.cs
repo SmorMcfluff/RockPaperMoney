@@ -3,24 +3,27 @@ using UnityEngine;
 [System.Serializable]
 public class CharacterAppearance
 {
-    public int bodyIndex;
-    public int hairIndex;
-    public int headIndex;
-    public int eyesIndex;
-    public int noseIndex;
-    public int mouthIndex;
+    public int bodyIndex = 0;
+    public int hairIndex = 0;
+    public int headIndex = 0;
+    public int eyesIndex = 0;
+    public int noseIndex = 0;
+    public int mouthIndex = 0;
 
 
-    public string bodyColorHex;
-    public string hairColorHex;
-    public string skinColorHex;
-    public string eyeColorHex;
+    public string bodyColorHex = "#ffffff";
+    public string hairColorHex = "#ffffff";
+    public string skinColorHex = "#ffffff";
+    public string eyeColorHex = "#ffffff";
 
 
     public CharacterAppearance(AdWatcherInfo data)
     {
-        SetStyles(data.sex);
-        SetColors(data.age);
+        if (data.lastName != "Mcfluff")
+        {
+            SetStyles(data.sex);
+            SetColors(data.age);
+        }
     }
 
 
@@ -78,6 +81,7 @@ public class CharacterAppearance
         return ColorHelper.RGBToHex(color);
     }
 
+
     private void MakePaler(ref Color color, int age)
     {
         float ageOverSixty = age - 59;
@@ -85,6 +89,7 @@ public class CharacterAppearance
         float lerpFactor = Mathf.Clamp01(ageOverSixty / maxAgeOverSixty) * 0.5f;
         color = Color.Lerp(color, Color.white, lerpFactor);
     }
+
 
     private string SetEyeColorHex()
     {
@@ -101,6 +106,7 @@ public class CharacterAppearance
 
         return ColorHelper.RGBToHex(color);
     }
+
 
     private string GetRandomColorHex()
     {

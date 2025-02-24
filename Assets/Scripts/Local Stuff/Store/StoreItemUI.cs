@@ -34,7 +34,6 @@ public class StoreItemUI : MonoBehaviour
         PlayerData player = SaveDataManager.Instance.localPlayerData;
         if (!purchasableObject.IsAffordable(player))
         {
-            Debug.Log(gameObject.name + "COLOR GRAY");
             buyButton.image.color = Color.gray;
         }
         else

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class StoreManager : MonoBehaviour
@@ -16,7 +17,7 @@ public class StoreManager : MonoBehaviour
 
     public GameObject storePanel;
 
-    [SerializeField] private GameObject[] storeCategories;
+    [SerializeField] private GameObject[] storeCategoryPanels;
 
     [SerializeField] private Transform handSignsCategory;
     [SerializeField] private Transform skinsCategory;
@@ -105,8 +106,8 @@ public class StoreManager : MonoBehaviour
             return;
         }
 
-        storeCategories[(int)currentCategory].SetActive(false);
-        storeCategories[buttonInt].SetActive(true);
+        storeCategoryPanels[(int)currentCategory].SetActive(false);
+        storeCategoryPanels[buttonInt].SetActive(true);
 
         SetCategoryButtonColor(buttonCategory);
         SetCategoryButtonInteractable(buttonCategory);

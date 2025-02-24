@@ -10,6 +10,7 @@ public class PlayerData
     public int lossCount;
 
     public bool[] unlockedHandSigns = new bool[3];
+    public bool hasAdam = false;
 
     public List<SkinType> ownedSkins = new()
     {

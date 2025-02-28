@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class FactoryUI : MonoBehaviour
 {
+    private enum UpgradeType { money, frequency }
+
     private int factoryIndex;
 
     private float vendAmount;
@@ -21,7 +23,6 @@ public class FactoryUI : MonoBehaviour
     [SerializeField] private Button moneyUpgradeButton;
     [SerializeField] private Button frequencyUpgradeButton;
 
-    private enum UpgradeType { money, frequency }
 
     public void Construct(int i)
     {
@@ -32,8 +33,8 @@ public class FactoryUI : MonoBehaviour
         vendAmount = parentFactory.GetUpgradedMoneyToVend();
         vendFrequency = parentFactory.GetUpgradedVendFrequency();
 
-        moneyUpgradeButton.onClick.AddListener(delegate { UpgradeFactory(UpgradeType.money); });
-        frequencyUpgradeButton.onClick.AddListener(delegate { UpgradeFactory(UpgradeType.frequency); });
+        moneyUpgradeButton.onClick.AddListener(() => UpgradeFactory(UpgradeType.money));
+        frequencyUpgradeButton.onClick.AddListener(() => UpgradeFactory(UpgradeType.frequency));
 
         UpdateText();
     }
@@ -47,11 +48,11 @@ public class FactoryUI : MonoBehaviour
         vendFrequency = parentFactory.GetUpgradedVendFrequency();
 
         factoryNameText.text = $"{parentFactory.adWatcherInfo.firstName} {parentFactory.adWatcherInfo.lastName}";
-        factoryStatsText.text = $"${vendAmount:F2}/{vendFrequency}s";
+        factoryStatsText.text = $"${vendAmount:N2}/{vendFrequency}s";
 
         if (parentFactory.moneyUpgrades < 10)
         {
-            moneyUpgradePriceText.text = $"${parentFactory.moneyUpgradePrice:F2}";
+            moneyUpgradePriceText.text = $"${parentFactory.moneyUpgradePrice:N2}";
         }
         else
         {
@@ -60,7 +61,7 @@ public class FactoryUI : MonoBehaviour
 
         if (parentFactory.frequencyUpgrades < 14)
         {
-            frequencyUpgradePriceText.text = $"${parentFactory.frequencyUpgradePrice:F2}";
+            frequencyUpgradePriceText.text = $"${parentFactory.frequencyUpgradePrice:N2}";
         }
         else
         {
@@ -89,7 +90,6 @@ public class FactoryUI : MonoBehaviour
     {
         var adInfo = IdleGameManager.Instance.factories[factoryIndex].adWatcherInfo;
         IDCardContainer.Instance.IDCard.LoadData(adInfo);
-
         IDCardContainer.Instance.IDCard.gameObject.SetActive(true);
     }
 }

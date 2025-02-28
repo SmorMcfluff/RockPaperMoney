@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ColorHelper
+public static class ColorHelper
 {
     public static Color HexToRGB(string hexCode)
     {
@@ -31,5 +31,11 @@ public class ColorHelper
         }
         result /= colors.Length;
         return result;
+    }
+
+
+    public static Color SetAlpha(this Color color, float alpha)
+    {
+        return new Color(color.r, color.g, color.b, alpha);
     }
 }

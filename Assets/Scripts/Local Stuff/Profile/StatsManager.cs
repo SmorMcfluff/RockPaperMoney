@@ -37,7 +37,7 @@ public class StatsManager : MonoBehaviour
         lossText.text = SetText("Losses", localPlayer.lossCount);
         percentageText.text = GetWinPercentage(localPlayer);
 
-        adWatchersText.text = SetText("AdVideo Watchers", localPlayer.factories.Count);
+        adWatchersText.text = SetText("Ad Watchers", localPlayer.factories.Count);
         averageAgeText.text = GetAverageAge();
         medianAgeText.text = GetMedianAge();
         modeAgeText.text = GetModeAges();

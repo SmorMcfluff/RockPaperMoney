@@ -21,7 +21,7 @@ public abstract class PurchasableObject : ScriptableObject
         else
         {
             player.ChangeMoneyBalance(-price);
-            SaveDataManager.Instance.SavePlayer();
+            InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
 
             StoreManager.Instance.UpdateBalanceText();
             return true;

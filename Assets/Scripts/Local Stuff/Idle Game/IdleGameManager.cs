@@ -21,11 +21,6 @@ public class IdleGameManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        SaveDataManager.Instance.InvokeRepeating(nameof(SaveDataManager.Instance.SavePlayer), 3, 30);
-    }
-
 
     private void Update()
     {
@@ -59,7 +54,7 @@ public class IdleGameManager : MonoBehaviour
         IdleGameUIManager.Instance.UpdateAllText();
 
         SaveDataManager.Instance.localPlayerData.factories.Add(newFactory.GetData());
-        SaveDataManager.Instance.SavePlayer();
+        InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
 
     }
 

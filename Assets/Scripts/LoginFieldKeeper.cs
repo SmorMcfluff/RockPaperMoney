@@ -12,6 +12,7 @@ public class LoginFieldKeeper : MonoBehaviour
         string email = emailField.text;
         string password = passwordField.text;
 
+        Debug.Log(email + "/" + password);
         LoginManager.Instance.RegisterNewUser(email, password);
     }
 }

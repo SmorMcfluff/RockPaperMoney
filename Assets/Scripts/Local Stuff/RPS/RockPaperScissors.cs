@@ -1,6 +1,5 @@
 using Firebase.Database;
 using Firebase.Extensions;
-using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
@@ -51,11 +50,11 @@ public class RockPaperScissors : MonoBehaviour
 
     private void AddButtonListeners()
     {
-        rockButton.onClick.AddListener(delegate { SetHandSign(HandSign.Rock, 0); });
-        paperButton.onClick.AddListener(delegate { SetHandSign(HandSign.Paper, 1); });
-        scissorsButton.onClick.AddListener(delegate { SetHandSign(HandSign.Scissors, 2); });
+        rockButton.onClick.AddListener(() => SetHandSign(HandSign.Rock, 0));
+        paperButton.onClick.AddListener(() => SetHandSign(HandSign.Paper, 1));
+        scissorsButton.onClick.AddListener(() => SetHandSign(HandSign.Scissors, 2));
 
-        readyButton.onClick.AddListener(delegate { DeclareReady(); });
+        readyButton.onClick.AddListener(() => DeclareReady());
     }
 
 
@@ -84,10 +83,13 @@ public class RockPaperScissors : MonoBehaviour
 
     private void Timer()
     {
-        timer += Time.deltaTime;
-        if (timer >= roundMaxLength)
+        if (SaveDataManager.Instance.localPlayerData.hasPlayedFirstGame)
         {
-            EndGame(false);
+            timer += Time.deltaTime;
+            if (timer >= roundMaxLength)
+            {
+                EndGame();
+            }
         }
     }
 
@@ -199,36 +201,47 @@ public class RockPaperScissors : MonoBehaviour
     }
 
 
-    private void EndGame(bool playerDisconnected)
+    private void EndGame(bool playerDisconnected = false)
     {
         var gameData = RPSMatchMaking.Instance.gameData;
 
         var players = SetLocalPlayer();
-        RPSPlayer localPlayer = players[0];
-        RPSPlayer onlinePlayer = players[1];
+        PlayerData localPlayer = SaveDataManager.Instance.localPlayerData;
+        RPSPlayer localRPSPlayer = players[0];
+        RPSPlayer onlineRPSPlayer = players[1];
 
-        GameResult gameResult = CompareHandSigns(localPlayer, onlinePlayer);
+        GameResult gameResult = CompareHandSigns(localRPSPlayer, onlineRPSPlayer);
 
-        if (gameResult == GameResult.LocalWin)
+        if (localPlayer.hasPlayedFirstGame)
         {
-            SaveDataManager.Instance.localPlayerData.winCount++;
+            switch (gameResult)
+            {
+                case GameResult.LocalWin:
+                    localPlayer.winCount++;
+                    break;
+                case GameResult.OnlineWin:
+                    localPlayer.lossCount++;
+                    break;
+            }
         }
-        else if (gameResult == GameResult.OnlineWin)
+        else
         {
-            SaveDataManager.Instance.localPlayerData.lossCount++;
+            localPlayer.hasPlayedFirstGame = true;
+            InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
         }
+
 
         gameData.gameResult = gameResult;
 
-        var isPlayerA = localPlayer.GetPlayerLetter() == "playerA";
+        var isPlayerA = localRPSPlayer.GetPlayerLetter() == "playerA";
 
-        gameData.playerA = isPlayerA ? localPlayer : onlinePlayer;
-        gameData.playerB = isPlayerA ? onlinePlayer : localPlayer;
+        gameData.playerA = isPlayerA ? localRPSPlayer : onlineRPSPlayer;
+        gameData.playerB = isPlayerA ? onlineRPSPlayer : localRPSPlayer;
 
 
         if (!playerDisconnected)
         {
-            SaveDataManager.Instance.SavePlayer();
+            InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
             SceneController.Instance.GoToScene("RPSView");
         }
         else
@@ -289,7 +302,7 @@ public class RockPaperScissors : MonoBehaviour
     {
         if (!RPSMatchMaking.Instance.localPlayer.isReady && RPSMatchMaking.Instance.localPlayer.handSign != HandSign.Undecided)
         {
-            Debug.Log("Ready");
+            readyButton.image.color = ColorHelper.CombineColors(Color.green, Color.black);
             RPSMatchMaking.Instance.localPlayer.isReady = true;
         }
 
@@ -312,9 +325,8 @@ public class RockPaperScissors : MonoBehaviour
                 return JsonUtility.FromJson<RPSPlayer>(jsonData);
             }
         }
-        catch (Exception ex)
+        catch
         {
-            Debug.LogWarning($"Error retrieving player data: {ex.Message}");
         }
 
         return new RPSPlayer();

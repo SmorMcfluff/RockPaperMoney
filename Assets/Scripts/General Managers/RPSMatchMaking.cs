@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using Firebase.Auth;
+using System;
+using System.Linq;
+using UnityEngine.InputSystem;
 
 public class RPSMatchMaking : MonoBehaviour
 {
@@ -56,15 +59,18 @@ public class RPSMatchMaking : MonoBehaviour
     {
         db.RootReference.Child("waitingGames").GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            DataSnapshot snap = task.Result;
-
-            CheckLoadedGames(snap);
+            CheckLoadedGames(task.Result);
         });
     }
 
 
     private void CheckLoadedGames(DataSnapshot snap)
     {
+        if (!SaveDataManager.Instance.localPlayerData.hasFinishedTutorial)
+        {
+            StartOfflineGame();
+            return;
+        }
         var snapshots = snap.Children;
         List<RPSGameData> rpsGames = new();
 
@@ -83,6 +89,7 @@ public class RPSMatchMaking : MonoBehaviour
 
                 localPlayer = new RPSPlayer()
                 {
+                    playerData = SaveDataManager.Instance.localPlayerData,
                     equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin
                 };
 
@@ -116,6 +123,7 @@ public class RPSMatchMaking : MonoBehaviour
 
         localPlayer = new RPSPlayer()
         {
+            playerData = SaveDataManager.Instance.localPlayerData,
             equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin,
             isPlayerA = true
         };
@@ -195,6 +203,42 @@ public class RPSMatchMaking : MonoBehaviour
         }
         catch { }
 
+        SceneController.Instance.GoToScene("RPSScene");
+    }
+
+
+    public async void StartOfflineGame()
+    {
+        localPlayer = new RPSPlayer()
+        {
+            playerData = SaveDataManager.Instance.localPlayerData,
+            equippedSkin = SaveDataManager.Instance.localPlayerData.equippedSkin,
+            isPlayerA = true
+        };
+
+        int unlockedSign = Array.IndexOf(SaveDataManager.Instance.localPlayerData.unlockedHandSigns, true) + 1;
+        int aiSign = unlockedSign + 1;
+        if (aiSign > 3) aiSign = 1;
+
+        gameData = new RPSGameData(localPlayer, userId)
+        {
+            playerB = new RPSPlayer()
+            {
+                playerData = new PlayerData(),
+                handSign = (HandSign)aiSign,
+                equippedSkin = SkinType.NeutralGloved,
+                isPlayerA = false,
+                isReady = true,
+            },
+            playerBConnected = true,
+        };
+        gameData.playerBJson = JsonUtility.ToJson(gameData.playerB);
+
+        await db.RootReference.Child("games").Child(gameData.gameID).Child("playerB").SetValueAsync(gameData.playerBJson).ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+                Debug.LogWarning(task.Exception);
+        });
         SceneController.Instance.GoToScene("RPSScene");
     }
 

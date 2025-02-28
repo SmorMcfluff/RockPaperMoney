@@ -34,14 +34,14 @@ public class IdleGameUIManager : MonoBehaviour
 
     public void UpdateAllText()
     {
-        UpdateMoneyText();
+        UpdateBalanceText();
         UpdateFactoryText();
         UpdatePriceText(FactoryStore.Instance.CheckIfAffordable());
         UpdateEfficiencyText();
     }
 
 
-    public void UpdateMoneyText()
+    public void UpdateBalanceText()
     {
         moneyText.text = "Balance: $" + SaveDataManager.Instance.localPlayerData.moneyBalance;
         UpdatePriceText(FactoryStore.Instance.CheckIfAffordable());
@@ -56,7 +56,7 @@ public class IdleGameUIManager : MonoBehaviour
 
     public void UpdatePriceText(bool canAfford)
     {
-        priceText.text = "$" + FactoryStore.Instance.factoryPrice.ToString("F2");
+        priceText.text = "$" + FactoryStore.Instance.factoryPrice.ToString(string.Format("N2"));
 
         if (canAfford)
         {
@@ -71,7 +71,7 @@ public class IdleGameUIManager : MonoBehaviour
 
     public void UpdateEfficiencyText()
     {
-        efficiencyText.text = $"${IdleGameManager.Instance.moneyPerMinute:F2}/min";
+        efficiencyText.text = $"${IdleGameManager.Instance.moneyPerMinute:N2}/min";
     }
 
 
@@ -80,6 +80,7 @@ public class IdleGameUIManager : MonoBehaviour
         GenerateFactoryUIs();
         SetFactoryUIListSize();
     }
+
 
     public void ClearFactoryUIList()
     {

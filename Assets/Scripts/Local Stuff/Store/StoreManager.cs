@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class StoreManager : MonoBehaviour
 {
     public enum StoreCategory { HandSigns, Skins }
-
-    public StoreCategory currentCategory = StoreCategory.Skins;
+    public StoreCategory currentCategory = StoreCategory.HandSigns;
 
     public static StoreManager Instance;
 
@@ -45,10 +43,17 @@ public class StoreManager : MonoBehaviour
     {
         UpdateBalanceText();
 
+        int selectedCategory = PlayerPrefs.GetInt("selectedStoreCategory", 0);
+        if (selectedCategory < 0 || selectedCategory >= storeCategoryPanels.Length)
+        {
+            selectedCategory = 0;
+        }
+        currentCategory = (StoreCategory)selectedCategory;
+
         SetCategoryButtonColor(currentCategory);
         SetCategoryButtonInteractable(currentCategory);
 
-        ChangeCategory(1);
+        ChangeCategory((int)currentCategory);
     }
 
 
@@ -113,6 +118,8 @@ public class StoreManager : MonoBehaviour
         SetCategoryButtonInteractable(buttonCategory);
 
         currentCategory = buttonCategory;
+
+        PlayerPrefs.SetInt("selectedStoreCategory", buttonInt);
     }
 
 

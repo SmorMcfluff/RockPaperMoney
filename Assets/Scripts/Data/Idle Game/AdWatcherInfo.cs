@@ -13,13 +13,16 @@ public class AdWatcherInfo
 
     public AdWatcherInfo()
     {
-        if (!SaveDataManager.Instance.localPlayerData.hasAdam && Random.Range(0, 69) == 0)
+        var localPlayer = SaveDataManager.Instance.localPlayerData;
+        if (localPlayer.hasFinishedTutorial && !localPlayer.hasAdam && Random.Range(0, 69) == 0)
         {
             country = Country.Yrgo;
             sex = Sex.Male;
             firstName = "Adam";
             lastName = "Mcfluff";
             age = GetAdamsAge();
+
+            SaveDataManager.Instance.localPlayerData.hasAdam = true;
             return;
         }
 

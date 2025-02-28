@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a90df05211f286a46a2e2b066644a08c, type: 3}
+  m_Name: 4_4
+  m_EditorClassIdentifier: 
+  message: 'I spent all my time making this damn game for free instead of just watching
+    some ads, and being the best damn guy at it too!
+
+
+    Oh well, I''m rambling.
+    The tutorial is over! Have fun and watch some ADS!
+
+
+    - Adam Mcfluff'

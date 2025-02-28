@@ -85,12 +85,17 @@ public class Factory
 
         if (IdleGameUIManager.Instance != null)
         {
-            IdleGameUIManager.Instance.UpdateMoneyText();
+            IdleGameUIManager.Instance.UpdateBalanceText();
         }
 
         if (StoreManager.Instance != null)
         {
             StoreManager.Instance.UpdateBalanceText();
+        }
+
+        if(ProfileSceneManager.Instance != null)
+        {
+            ProfileSceneManager.Instance.UpdateBalanceText();
         }
     }
 
@@ -123,7 +128,7 @@ public class Factory
 
     public void UpgradeMoneyVendAmount()
     {
-        float moneyBalance = float.Parse(SaveDataManager.Instance.localPlayerData.moneyBalance, CultureInfo.InvariantCulture);
+        float moneyBalance = SaveDataManager.Instance.localPlayerData.GetMoneyBalance();
         if (moneyUpgrades < 10 && moneyBalance >= moneyUpgradePrice)
         {
             moneyUpgrades++;
@@ -134,20 +139,20 @@ public class Factory
 
             try
             {
-                IdleGameUIManager.Instance.UpdateMoneyText();
+                IdleGameUIManager.Instance.UpdateBalanceText();
                 IdleGameUIManager.Instance.UpdateEfficiencyText();
             }
             catch { }
 
-            SaveDataManager.Instance.SavePlayer();
+            InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
         }
     }
 
 
     public void UpgradeFrequency()
     {
-        string moneyBalance = SaveDataManager.Instance.localPlayerData.moneyBalance;
-        if (frequencyUpgrades < 14 && float.Parse(moneyBalance, CultureInfo.InvariantCulture) >= frequencyUpgradePrice)
+        float moneyBalance = SaveDataManager.Instance.localPlayerData.GetMoneyBalance();
+        if (frequencyUpgrades < 14 && moneyBalance >= frequencyUpgradePrice)
         {
             frequencyUpgrades++;
             upgradedVendFrequency = GetUpgradedVendFrequency();
@@ -156,14 +161,14 @@ public class Factory
 
             try
             {
-                IdleGameUIManager.Instance.UpdateMoneyText();
+                IdleGameUIManager.Instance.UpdateBalanceText();
                 IdleGameUIManager.Instance.UpdateEfficiencyText();
             }
             catch { }
 
             SetFrequencyUpgradePrice();
 
-            SaveDataManager.Instance.SavePlayer();
+            InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
         }
     }
 

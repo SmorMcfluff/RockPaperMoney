@@ -1,3 +1,4 @@
+[System.Serializable]
 public class RPSGameData
 {
     public string gameID;
@@ -20,7 +21,7 @@ public class RPSGameData
         gameID = UnityEngine.Random.Range(0, int.MaxValue).ToString();
 
         playerA = playerData;
-        playerAJson = UnityEngine.JsonUtility.ToJson(playerData.playerData);
+        //playerAJson = UnityEngine.JsonUtility.ToJson(playerData.playerData);
 
         hostUserId = userID;
 
@@ -29,7 +30,7 @@ public class RPSGameData
 
     public void CheckConnectedPlayers()
     {
-        playerAConnected = (playerAJson != null);
-        playerBConnected = (playerBJson != null);
+        playerAConnected = (playerA != null);
+        playerBConnected = (playerB != null);
     }
 }

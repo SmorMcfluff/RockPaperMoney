@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
+    private string lastScene;
 
     private void Awake()
     {
@@ -21,8 +22,22 @@ public class SceneController : MonoBehaviour
 
     public void GoToScene(string sceneName)
     {
+        lastScene = SceneManager.GetActiveScene().name;
+        InternetChecker.IsInternetAvailable(() => SaveDataManager.Instance.SavePlayer());
         SceneManager.LoadScene(sceneName);
         SetOrientation(sceneName);
+    }
+
+    public void ReturnToLastScene()
+    {
+        if (!SaveDataManager.Instance.localPlayerData.hasFinishedTutorial)
+        {
+            GoToScene("MainMenu");
+        }
+        else
+        {
+            GoToScene(lastScene);
+        }
     }
 
 

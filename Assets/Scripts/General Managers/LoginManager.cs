@@ -3,12 +3,14 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Firebase.Database;
+using System.Threading.Tasks;
 
 public class LoginManager : MonoBehaviour
 {
     public static LoginManager Instance;
 
     FirebaseAuth auth;
+    string key;
 
     private void Awake()
     {
@@ -21,68 +23,74 @@ public class LoginManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        GetKey();
     }
 
-
-
-    public void Start()
+    private async void Start()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.Exception != null)
-            {
-                Debug.LogError(task.Exception);
-            }
+        InternetChecker.IsInternetAvailable(() => { });
+        await Init();
 
-            auth = FirebaseAuth.DefaultInstance;
-            CheckCredentials();
-        });
     }
+    public async Task Init()
+    {
+        Debug.Log("Init Runs");
+        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (dependencyStatus != DependencyStatus.Available)
+        {
+            Debug.LogError("Firebase dependencies are not available: " + dependencyStatus);
+            return;
+        }
+
+        auth = FirebaseAuth.DefaultInstance;
+        if (auth == null)
+        {
+            Debug.LogError("FirebaseAuth initialization failed.");
+            return;
+        }
+
+        Debug.Log("Firebase Auth initialized successfully.");
+
+        key = await GetKey();
+
+        await CheckCredentials();
+    }
+
+
 
 
     public void RegisterNewUser(string email, string password)
     {
+        if (auth == null)
+        {
+            Debug.LogError("FirebaseAuth is not initialized.");
+            return;
+        }
+
+        Debug.Log("Attempting to register new user with email: " + email);
+
         auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
-            string message = "";
             if (task.Exception != null)
             {
                 FirebaseException firebaseEx = task.Exception.GetBaseException() as FirebaseException;
                 AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
-                message = "Register Failed!";
-                switch (errorCode)
+                string message = errorCode switch
                 {
-                    case AuthError.EmailAlreadyInUse:
-                        message = "Attempting Log In";
-                        SignIn();
-                        break;
-                    case AuthError.MissingEmail:
-                        message = "Missing Email";
-                        break;
-                    case AuthError.MissingPassword:
-                        message = "Missing Password";
-                        break;
-                    case AuthError.WeakPassword:
-                        message = "Weak Password";
-                        break;
-                    default:
-                        Debug.LogWarning(task.Exception);
-                        break;
-                }
-                FindAnyObjectByType<LoginFieldKeeper>().errorText.text = message;
-                Debug.Log(message);
+                    AuthError.MissingEmail => "Enter your E-mail address",
+                    AuthError.MissingPassword => "Enter your password",
+                    AuthError.WrongPassword => "Wrong Password",
+                    AuthError.UserDisabled => "User Disabled",
+                    _ => "Register failed!"
+                };
+
+                Debug.LogError(firebaseEx);
             }
             else
             {
                 FirebaseUser newUser = task.Result.User;
 
                 SaveCredentials(email, password);
-
-                FindAnyObjectByType<LoginFieldKeeper>().errorText.text = "User Registered!";
-                var saveData = SaveDataManager.Instance.localPlayerData;
-
                 SaveDataManager.Instance.SavePlayer();
                 Invoke(nameof(SignIn), 0.5f);
             }
@@ -90,66 +98,43 @@ public class LoginManager : MonoBehaviour
     }
 
 
-    private void SignIn()
+
+
+    private async Task SignIn()
     {
         string[] credentials = GetCredentials();
         string email = credentials[0];
         string password = credentials[1];
 
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
+        try
         {
-            if (task.Exception != null)
+            AuthResult result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+            FirebaseUser newUser = result.User;
+            SaveCredentials(email, password);
+
+            RPSMatchMaking.Instance.userId = auth.CurrentUser.UserId;
+            SaveDataManager.Instance.LoadPlayer();
+        }
+        catch (FirebaseException firebaseEx)
+        {
+            AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+            string message = errorCode switch
             {
-                Debug.LogWarning(task.Exception);
-
-                FirebaseException firebaseEx = task.Exception.GetBaseException() as FirebaseException;
-                AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-                string message = "Sign In Failed!";
-                switch (errorCode)
-                {
-                    case AuthError.MissingEmail:
-                        message = "Enter your E-mail address";
-                        break;
-                    case AuthError.MissingPassword:
-                        message = "Enter your password";
-                        break;
-                    case AuthError.WrongPassword:
-                        message = "Wrong Password";
-                        break;
-                    case AuthError.UserDisabled:
-                        message = "User Disabled";
-                        break;
-                    case AuthError.Failure:
-                        message = "Something went wrong!";
-                        break;
-                    default:
-                        Debug.LogWarning(task.Exception);
-                        break;
-                }
-                Debug.Log(message);
-
-                FindAnyObjectByType<LoginFieldKeeper>().errorText.text = message;
-            }
-            else
-            {
-                FirebaseUser newUser = task.Result.User;
-                SaveCredentials(email, password);
-
-                Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
-
-                RPSMatchMaking.Instance.userId = auth.CurrentUser.UserId;
-                SaveDataManager.Instance.LoadPlayer();
-                SceneController.Instance.GoToScene("MainMenu");
-            }
-        });
+                AuthError.MissingEmail => "Enter your E-mail address",
+                AuthError.MissingPassword => "Enter your password",
+                AuthError.WrongPassword => "Wrong Password",
+                AuthError.UserDisabled => "User Disabled",
+                _ => "Something went wrong!"
+            };
+            Debug.Log(firebaseEx);
+            FindAnyObjectByType<LoginFieldKeeper>().errorText.text = message;
+        }
     }
 
 
     private void SaveCredentials(string email, string password)
     {
-        var key = GetKey();
-
         var encryptedEmail = Cryptography.Encrypt(email, key);
         var encryptedPassword = Cryptography.Encrypt(password, key);
 
@@ -158,36 +143,30 @@ public class LoginManager : MonoBehaviour
     }
 
 
-    private static string GetKey()
+    private static async Task<string> GetKey()
     {
-        FirebaseDatabase.DefaultInstance.RootReference.Child("key").GetValueAsync().ContinueWithOnMainThread(task =>
-        {
-            string key = task.Result.GetRawJsonValue();
-            return key.Trim('"');
-        });
-        return "";
+        var snapshot = await FirebaseDatabase.DefaultInstance.RootReference.Child("key").GetValueAsync();
+
+        return snapshot.Exists ? snapshot.Value.ToString().Trim('"') : "";
     }
 
 
-    private void CheckCredentials()
+    private async Task CheckCredentials()
     {
-        if (!string.IsNullOrEmpty(PlayerPrefs.GetString("email")) && !string.IsNullOrEmpty(PlayerPrefs.GetString("password")))
+        if (!string.IsNullOrEmpty(PlayerPrefs.GetString("email")) &&
+            !string.IsNullOrEmpty(PlayerPrefs.GetString("password")))
         {
-            string[] credentials = GetCredentials();
-            RegisterNewUser(credentials[0], credentials[1]);
+            await SignIn();
         }
     }
 
 
     private string[] GetCredentials()
     {
-        var key = GetKey();
-
         string email = Cryptography.Decrypt(PlayerPrefs.GetString("email"), key);
         string password = Cryptography.Decrypt(PlayerPrefs.GetString("password"), key);
 
-        string[] credentials = { email, password };
-        return credentials;
+        return new string[] { email, password };
     }
 
 

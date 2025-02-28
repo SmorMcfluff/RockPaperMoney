@@ -54,8 +54,6 @@ public class SaveDataManager : MonoBehaviour
             if (snap == null || snap.GetRawJsonValue() == null)
             {
                 Debug.LogWarning("Data snapshot is null or empty.");
-                playerIsLoaded = true;
-                return;
             }
 
             string rawJson = snap.GetRawJsonValue();
@@ -65,13 +63,13 @@ public class SaveDataManager : MonoBehaviour
                 string cleanedJson = Regex.Unescape(rawJson).Trim('"');
                 localPlayerData = JsonUtility.FromJson<PlayerData>(cleanedJson);
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.LogError("Deserialization failed: " + ex.Message);
-                return;
+                localPlayerData = new PlayerData();
             }
 
             playerIsLoaded = true;
+            SceneController.Instance.GoToScene("MainMenu");
 
             if (localPlayerData.factories != null && localPlayerData.factories.Count > 0)
             {
@@ -149,7 +147,7 @@ public class SaveDataManager : MonoBehaviour
     {
         if (!SceneManager.GetActiveScene().name.Contains("Login"))
         {
-            SavePlayer();
+            InternetChecker.IsInternetAvailable(() => SavePlayer());
         }
     }
 
@@ -158,7 +156,7 @@ public class SaveDataManager : MonoBehaviour
     {
         if (!SceneManager.GetActiveScene().name.Contains("Login"))
         {
-            SavePlayer();
+            InternetChecker.IsInternetAvailable(() => SavePlayer());
         }
     }
 }

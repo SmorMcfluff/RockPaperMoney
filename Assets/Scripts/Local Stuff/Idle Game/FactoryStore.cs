@@ -33,7 +33,7 @@ public class FactoryStore : MonoBehaviour
             SaveDataManager.Instance.localPlayerData.ChangeMoneyBalance(-Instance.factoryPrice);
             IdleGameManager.Instance.AddFactory();
 
-            IdleGameUIManager.Instance.UpdateMoneyText();
+            IdleGameUIManager.Instance.UpdateBalanceText();
             IdleGameUIManager.Instance.UpdatePriceText(Instance.CheckIfAffordable());
         }
     }

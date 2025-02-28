@@ -1,5 +1,4 @@
 using UnityEngine;
-using Firebase.Database;
 using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
@@ -11,23 +10,60 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] Button storeButton;
     [SerializeField] Button profileButton;
     [SerializeField] Button signOutButton;
+    [SerializeField] Button watchAdButton;
     [SerializeField] Button cancelButton;
     public GameObject waitingPanel;
 
+    private Button[] buttonsAfterFirstGame;
+    private Button[] buttonsAfterWatchedAds;
 
     private void Awake()
     {
         Instance = this;
+
+        buttonsAfterFirstGame = new Button[]
+        {
+            storeButton, cancelButton
+        };
+
+        buttonsAfterWatchedAds = new Button[]
+        {
+            watchAdButton, idleGameButton,
+        };
     }
 
     void Start()
     {
-        RPSButton.onClick.AddListener(delegate { RPSMatchMaking.Instance.ConnectToGame(); });
-        idleGameButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("IdleGameScene"); });
-        storeButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Store"); });
-        profileButton.onClick.AddListener(delegate { SceneController.Instance.GoToScene("Profile"); });
-        signOutButton.onClick.AddListener(delegate { LoginManager.Instance.SignOut(); });
-        cancelButton.onClick.AddListener(delegate { RPSMatchMaking.Instance.CancelMatchMaking(); });
+        SetUpButtons();
+    }
+
+
+    private void SetUpButtons()
+    {
+        PlayerData localPlayer = SaveDataManager.Instance.localPlayerData;
+        RPSButton.onClick.AddListener(() => RPSMatchMaking.Instance.ConnectToGame());
+        profileButton.onClick.AddListener(() => SceneController.Instance.GoToScene("Profile"));
+        signOutButton.onClick.AddListener(() => LoginManager.Instance.SignOut());
+
+        if (localPlayer.hasPlayedFirstGame)
+        {
+            foreach (Button button in buttonsAfterFirstGame)
+            {
+                button.gameObject.SetActive(true);
+            }
+            storeButton.onClick.AddListener(() => SceneController.Instance.GoToScene("Store"));
+            cancelButton.onClick.AddListener(() => RPSMatchMaking.Instance.CancelMatchMaking());
+        }
+
+        if (localPlayer.watchedAdCount != 0)
+        {
+            for (int i = 0; i < Mathf.Min(localPlayer.watchedAdCount, buttonsAfterWatchedAds.Length); i++)
+            {
+                buttonsAfterWatchedAds[i].gameObject.SetActive(true);
+            }
+            watchAdButton.onClick.AddListener(() => SceneController.Instance.GoToScene("AdWatching"));
+            idleGameButton.onClick.AddListener(() => SceneController.Instance.GoToScene("IdleGameScene"));
+        }
     }
 
 
@@ -40,8 +76,6 @@ public class MainMenuManager : MonoBehaviour
                 await RPSMatchMaking.Instance.RemoveWaitingGame();
             }
             catch { }
-
-            var gameID = string.Empty;
         }
 
         waitingPanel.SetActive(!waitingPanel.activeSelf);

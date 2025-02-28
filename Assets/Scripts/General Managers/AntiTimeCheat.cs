@@ -19,22 +19,33 @@ public class AntiTimeCheat : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            if (CheckForTimeCheat())
+            InternetChecker.IsInternetAvailable(() =>
             {
-                Instantiate(cheatDetectedBox, FindAnyObjectByType<Canvas>().transform);
-                Destroy(gameObject);
-            }
+                if (CheckForTimeCheat())
+                {
+                    Instantiate(cheatDetectedBox, FindFirstObjectByType<Canvas>().transform);
+                    Destroy(gameObject);
+                }
+            });
         }
     }
 
 
     private void OnApplicationFocus(bool focus)
     {
-        if (CheckForTimeCheat())
+        if (!focus)
         {
-            Instantiate(cheatDetectedBox, FindAnyObjectByType<Canvas>().transform);
-            Destroy(gameObject);
+            return;
         }
+
+        InternetChecker.IsInternetAvailable(() =>
+        {
+            if (CheckForTimeCheat())
+            {
+                Instantiate(cheatDetectedBox, FindFirstObjectByType<Canvas>().transform);
+                Destroy(gameObject);
+            }
+        });
     }
 
 
@@ -45,6 +56,6 @@ public class AntiTimeCheat : MonoBehaviour
 
         var timeDifference = (networkTime - systemTime).Duration();
 
-        return (timeDifference > acceptableRange);  
+        return (timeDifference > acceptableRange);
     }
 }
